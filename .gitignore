@@ -1,0 +1,19 @@
+# Cachés y archivos compilados de Python
+__pycache__/
+*.py[cod]
+
+# Cache de pytest
+.pytest_cache/
+
+# Variables de entorno locales
+.env
+
+# Configuración del editor (opcional, común en entorno local)
+.vscode/
+
+# Sistema macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
