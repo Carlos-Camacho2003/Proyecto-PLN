@@ -17,13 +17,25 @@ from __future__ import annotations
 
 import sys
 
+# Fuerza UTF-8 en la consola de Windows (evita UnicodeEncodeError con ═, →, etc.)
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 from src.tokenizer import Tokenizador
 from src.silabeo import silabas, contar_silabas_verso
+from src.cfg import (
+    gramatica, gramatica_con_libre,
+    secuencia_rimas, describir_esquema,
+    analizar_con_fallback, nombre_esquema,
+    descripcion_formal,
+)
 
 #Para empezar xd
 LETRA_DEMO = (
     "Llevo el barrio en la sangre, lo respiro al andar / "
-    "cada esquina me canta, cada calle es mi hogar"
+    "cada esquina me canta, cada calle es mi hogar / "
+    "llevo tu nombre grabado dentro del corazón / "
+    "y cada verso que escribo vibra con tu razón"
 )
 
 
@@ -80,6 +92,39 @@ def mostrar_metrica(tokenizador, tokens):
         print(f"   Verso {n}: {c} sílabas ({etiqueta})")
 
 
+def mostrar_estructura(tokenizador, tokens):
+    print()
+    print(_linea("═"))
+    print(" FASE 3 · ESTRUCTURA MÉTRICA (CFG + Parser)")
+    print(_linea("═"))
+    versos = tokenizador.separar_versos(tokens)
+
+    versos_palabras = [
+        [t.texto for t in v if t.tipo in ("PALABRA", "CONTRACCION")]
+        for v in versos
+    ]
+
+    etiquetas, mapa = secuencia_rimas(versos_palabras, modo="consonante")
+    print(f"\n {describir_esquema(etiquetas, mapa)}")
+
+    arboles, modo = analizar_con_fallback(etiquetas, gramatica, gramatica_con_libre)
+
+    if not arboles:
+        print(" -> No se pudo reconocer ninguna estructura.")
+        return
+
+    if modo == 'clasica' and len(arboles) > 1:
+        print(f"\n AMBIGÜEDAD ESTRUCTURAL: {len(arboles)} lecturas posibles")
+        for i, a in enumerate(arboles, 1):
+            print(f"   Lectura {i}: {nombre_esquema(a)}")
+    else:
+        print(f"\n Estructura detectada: {nombre_esquema(arboles[0])}")
+        print("\n Árbol de derivación:")
+        for linea in arboles[0].mostrar().split("\n"):
+            if linea.strip():
+                print(f"   {linea}")
+
+
 def cargar_texto(argv):
     if len(argv) >= 2:
         if argv[1] == "-":
@@ -100,6 +145,7 @@ def main(argv=None):
 
     tokens = mostrar_tokens(tokenizador, texto)
     mostrar_metrica(tokenizador, tokens)
+    mostrar_estructura(tokenizador, tokens)
     print()
 
 
