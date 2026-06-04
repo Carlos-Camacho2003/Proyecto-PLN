@@ -13,12 +13,14 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.cfg import (
+from src.gramatica import (
     gramatica,
     gramatica_con_libre,
     analizar_con_fallback,
     nombre_esquema,
     descripcion_formal,
+)
+from src.rima import (
     secuencia_rimas,
     describir_esquema,
 )

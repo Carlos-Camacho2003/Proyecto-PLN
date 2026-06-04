@@ -23,12 +23,12 @@ if hasattr(sys.stdout, "reconfigure"):
 
 from src.tokenizer import Tokenizador
 from src.silabeo import silabas, contar_silabas_verso
-from src.cfg import (
+from src.gramatica import (
     gramatica, gramatica_con_libre,
-    secuencia_rimas, describir_esquema,
     analizar_con_fallback, nombre_esquema,
     descripcion_formal,
 )
+from src.rima import secuencia_rimas, describir_esquema
 
 #Para empezar xd
 LETRA_DEMO = (

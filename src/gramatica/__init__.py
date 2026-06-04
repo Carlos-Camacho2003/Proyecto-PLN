@@ -1,4 +1,4 @@
-"""Fase 3 — CFG + Parser recursivo descendente para esquemas métricos."""
+"""Gramática (CFG) + parser de esquemas métricos — núcleo del sistema."""
 
 from .nodo            import Nodo
 from .gramatica       import (
@@ -10,25 +10,16 @@ from .gramatica       import (
     descripcion_formal,
 )
 from .parser          import (
-    parse, parse_todos,
+    construir_chart,
     analizar, analizar_todos, analizar_con_fallback,
     nombre_esquema,
-)
-from .extractor_rima  import (
-    terminacion_consonante,
-    terminacion_asonante,
-    palabra_final,
-    secuencia_rimas,
-    describir_esquema,
 )
 
 __all__ = [
     "Nodo",
     "gramatica", "gramatica_con_libre",
     "NO_TERMINALES", "TERMINALES", "SIMBOLO_INICIAL", "descripcion_formal",
-    "parse", "parse_todos",
+    "construir_chart",
     "analizar", "analizar_todos", "analizar_con_fallback",
     "nombre_esquema",
-    "terminacion_consonante", "terminacion_asonante", "palabra_final",
-    "secuencia_rimas", "describir_esquema",
 ]
