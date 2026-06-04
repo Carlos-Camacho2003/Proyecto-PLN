@@ -13,6 +13,10 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+# Fuerza UTF-8 en la consola de Windows (evita UnicodeEncodeError con ═, →, etc.)
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 from src.gramatica import (
     gramatica,
     gramatica_con_libre,
@@ -80,18 +84,18 @@ def test_parser():
 
 def test_extractor_rima():
     print("\n[Extractor de rima — integracion con Fase 2]")
-    # Cuatro versos del enunciado del proyecto.
+    # Cuatro versos con esquema AABB: 1-2 riman en 'ar', 3-4 en 'on'.
     versos = [
         ["Llevo", "el", "barrio", "en", "la", "sangre", "lo", "respiro", "al", "andar"],
         ["cada", "esquina", "me", "canta", "cada", "calle", "es", "mi", "hogar"],
-        ["no", "encuentro", "paz", "ni", "razon", "cuando", "me", "dices", "que", "no"],
-        ["todo", "es", "un", "eco", "veloz", "que", "se", "queda", "en", "el", "adios"],
+        ["llevo", "tu", "nombre", "grabado", "dentro", "del", "corazón"],
+        ["y", "cada", "verso", "que", "escribo", "vibra", "con", "tu", "razón"],
     ]
     etiquetas, mapa = secuencia_rimas(versos, modo="consonante")
     check(etiquetas[0] == etiquetas[1],
           "verso 1 y 2 riman (ambos en 'ar')")
     check(etiquetas[2] == etiquetas[3],
-          "verso 3 y 4 riman")
+          "verso 3 y 4 riman (ambos en 'on')")
     check(etiquetas[0] != etiquetas[2],
           "verso 1 y 3 no riman")
     print(f"   Esquema detectado: {describir_esquema(etiquetas, mapa)}")
