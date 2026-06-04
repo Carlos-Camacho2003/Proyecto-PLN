@@ -3,7 +3,8 @@ Analizador de letras de rap / música urbana colombiana — CLI.
 
 Estado actual del pipeline:
     [Fase 1] Tokenización con DFA
-    [Fase 2] Silabeo + conteo métrico de versos (sinalefa + acento final)
+    [Fase 2] Silabeo + conteo métrico de versos (sinalefa + acento fi    [Fase 3] CFG + Parser recursivo descendente para esquemas de rima
+    [Fase 5] DCG + Unificación: verifica que las rimas reales sean consistentes
 
 Uso:
     python main.py                 # corre con la letra de demostración
@@ -29,6 +30,7 @@ from src.gramatica import (
     descripcion_formal,
 )
 from src.rima import secuencia_rimas, describir_esquema
+from src.unificacion import verificar_esquema, filtrar_arboles_validos
 
 #Para empezar xd
 LETRA_DEMO = (
@@ -111,7 +113,7 @@ def mostrar_estructura(tokenizador, tokens):
 
     if not arboles:
         print(" -> No se pudo reconocer ninguna estructura.")
-        return
+        return None
 
     if modo == 'clasica' and len(arboles) > 1:
         print(f"\n AMBIGÜEDAD ESTRUCTURAL: {len(arboles)} lecturas posibles")
@@ -123,6 +125,38 @@ def mostrar_estructura(tokenizador, tokens):
         for linea in arboles[0].mostrar().split("\n"):
             if linea.strip():
                 print(f"   {linea}")
+
+    return versos_palabras, etiquetas, arboles, modo
+
+
+def mostrar_verificacion_rima(versos_palabras, etiquetas, arboles, modo):
+    """Fase 5: verifica con DCG + unificación que las rimas reales sean
+    consistentes con el esquema que propuso la CFG."""
+    print()
+    print(_linea("═"))
+    print(" FASE 5 · VERIFICACIÓN DE RIMAS (DCG + unificación)")
+    print(_linea("═"))
+
+    # Verificación detallada del esquema observado.
+    resultado = verificar_esquema(etiquetas, versos_palabras,
+                                  modo="consonante", detalle=True)
+
+    print("\n Unificación de variables de rima:")
+    for paso in resultado["traza"]:
+        print(f"   {paso}")
+
+    if resultado["valido"]:
+        ligaduras = "  ".join(f"[{k}]=-{v}" for k, v in resultado["ligaduras"].items())
+        print(f"\n ✓ Esquema CONSISTENTE.  Ligaduras: {ligaduras}")
+    else:
+        print(f"\n ✗ Esquema INCONSISTENTE.  {resultado['motivo']}")
+
+    # Filtra los árboles de la CFG que sobreviven a la verificación.
+    if arboles:
+        validos = filtrar_arboles_validos(arboles, versos_palabras, modo="consonante")
+        print(f"\n Árboles que pasan la verificación DCG: {len(validos)}/{len(arboles)}")
+        for a in validos:
+            print(f"   ✓ {nombre_esquema(a)}")
 
 
 def cargar_texto(argv):
@@ -142,6 +176,14 @@ def main(argv=None):
     print()
     print(" Letra analizada:")
     print(f"   {texto}\n")
+
+    tokens = mostrar_tokens(tokenizador, texto)
+    mostrar_metrica(tokenizador, tokens)
+    resultado = mostrar_estructura(tokenizador, tokens)
+    if resultado:
+        versos_palabras, etiquetas, arboles, modo = resultado
+        mostrar_verificacion_rima(versos_palabras, etiquetas, arboles, modo)
+xto}\n")
 
     tokens = mostrar_tokens(tokenizador, texto)
     mostrar_metrica(tokenizador, tokens)
