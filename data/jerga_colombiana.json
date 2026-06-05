@@ -1,0 +1,239 @@
+{
+    "_comentario": "Diccionario de jerga colombiana polisémica — Fase 6",
+    "_version": "1.0",
+
+    "vuelta": {
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "asunto / encargo / negocio",
+                "ejemplo": "tengo una vuelta que hacer en el centro",
+                "region": "paisa",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "venganza / represalia",
+                "ejemplo": "esa vuelta me la cobran caro",
+                "region": "urbano",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "parcero": {
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "amigo cercano / compañero de confianza",
+                "ejemplo": "ese es mi parcero de toda la vida",
+                "region": "paisa",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "apelativo genérico para cualquier persona",
+                "ejemplo": "parcero, ¿qué más?",
+                "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "parce": {
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "amigo / apócope de parcero",
+                "ejemplo": "¿qué más, parce?",
+                "region": "paisa",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "apelativo para desconocidos",
+                "ejemplo": "parce, me ayuda con esto",
+                "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "llave": {
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "amigo cercano / aliado del barrio",
+                "ejemplo": "ese man es mi llave del barrio",
+                "region": "bogotano",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "herramienta para abrir cerraduras",
+                "ejemplo": "perdí la llave de la casa",
+                "region": "nacional",
+                "registro": "estándar"
+            }
+        ]
+    },
+
+    "chimba": {
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "algo muy bueno / excelente / genial",
+                "ejemplo": "esa canción está chimba",
+                "region": "paisa",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "expresión de rechazo o cosa de mala calidad",
+                "ejemplo": "qué chimba de idea tan mala",
+                "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "nota": {
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "algo bueno / chévere / de calidad",
+                "ejemplo": "eso está muy nota",
+                "region": "bogotano",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "persona conocida / figura respetada del barrio",
+                "ejemplo": "ese man es una nota en el barrio",
+                "region": "urbano",
+                "registro": "informal"
+            },
+            {
+                "id": 3,
+                "significado": "mensaje escrito / billete de papel",
+                "ejemplo": "me dejó una nota en la puerta",
+                "region": "nacional",
+                "registro": "estándar"
+            }
+        ]
+    },
+
+    "camello": {
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "trabajo / empleo / labor",
+                "ejemplo": "consiguió un camello en la empresa",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "animal del desierto de la familia camélidos",
+                "ejemplo": "vimos un camello en el zoológico",
+                "region": "nacional",
+                "registro": "estándar"
+            }
+        ]
+    },
+
+    "man": {
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "tipo / individuo / persona cualquiera",
+                "ejemplo": "ese man no me cae bien",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "novio / pareja sentimental",
+                "ejemplo": "ese es el man de ella",
+                "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "billete": {
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "dinero / plata en efectivo",
+                "ejemplo": "tiene mucho billete ese man",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "papel moneda de denominación específica",
+                "ejemplo": "pagó con un billete de cincuenta",
+                "region": "nacional",
+                "registro": "estándar"
+            }
+        ]
+    },
+
+    "pinta": {
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "ropa / vestimenta / look / outfit",
+                "ejemplo": "qué pinta tan bacana llevas hoy",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "apariencia física / aspecto general",
+                "ejemplo": "tiene pinta de malandro",
+                "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "vacano": {
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "persona chévere / buena gente / bacana",
+                "ejemplo": "ese parce es muy vacano",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "algo de buena calidad / que está bien hecho",
+                "ejemplo": "qué vacano quedó ese diseño",
+                "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "mamar": {
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "molestar / fastidiar / chiflar",
+                "ejemplo": "deja de mamar gallo",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "engañar / tomar del pelo",
+                "ejemplo": "me estás mamando, eso no es verdad",
+                "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    }
+}
