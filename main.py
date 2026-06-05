@@ -1,10 +1,12 @@
 """
 Analizador de letras de rap / música urbana colombiana — CLI.
 
-Estado actual del pipeline:
-    [Fase 1] Tokenización con DFA
-    [Fase 2] Silabeo + conteo métrico de versos (sinalefa + acento fi    [Fase 3] CFG + Parser recursivo descendente para esquemas de rima
-    [Fase 5] DCG + Unificación: verifica que las rimas reales sean consistentes
+Pipeline:
+    [1] Tokenización con DFA
+    [2] Silabeo + conteo métrico de versos (sinalefa + acento final)
+    [3] Rima: terminación fonémica y secuencia simbólica de rima
+    [4] CFG + parser tipo Chart (Earley): estructura métrica y ambigüedad
+    [5] DCG + unificación: verifica que las rimas reales sean consistentes
 
 Uso:
     python main.py                 # corre con la letra de demostración
@@ -183,11 +185,6 @@ def main(argv=None):
     if resultado:
         versos_palabras, etiquetas, arboles, modo = resultado
         mostrar_verificacion_rima(versos_palabras, etiquetas, arboles, modo)
-xto}\n")
-
-    tokens = mostrar_tokens(tokenizador, texto)
-    mostrar_metrica(tokenizador, tokens)
-    mostrar_estructura(tokenizador, tokens)
     print()
 
 
