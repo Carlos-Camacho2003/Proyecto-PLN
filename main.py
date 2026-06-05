@@ -18,6 +18,8 @@ Versos: se separan por '/' o por salto de línea.
 
 from __future__ import annotations
 
+import glob
+import os
 import sys
 
 # Fuerza UTF-8 en la consola de Windows (evita UnicodeEncodeError con ═, →, etc.)
@@ -161,23 +163,37 @@ def mostrar_verificacion_rima(versos_palabras, etiquetas, arboles, modo):
             print(f"   ✓ {nombre_esquema(a)}")
 
 
+DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+
+
 def cargar_texto(argv):
-    if len(argv) >= 2:
-        if argv[1] == "-":
-            return sys.stdin.read()
-        with open(argv[1], "r", encoding="utf-8") as f:
-            return f.read()
-    return LETRA_DEMO
+    """Lee la letra desde un archivo (argv[1]) o desde stdin (argv[1] == '-')."""
+    if argv[1] == "-":
+        return sys.stdin.read()
+    with open(argv[1], "r", encoding="utf-8") as f:
+        return f.read()
 
 
-def main(argv=None):
-    argv = argv if argv is not None else sys.argv
-    texto = cargar_texto(argv)
-    tokenizador = Tokenizador()
+def listar_canciones():
+    """Rutas de las letras en data/, ordenadas por nombre."""
+    return sorted(glob.glob(os.path.join(DATA_DIR, "*.txt")))
 
+
+def titulo_desde_ruta(ruta):
+    """'data/manicomio_527.txt' -> 'Manicomio 527'."""
+    nombre = os.path.splitext(os.path.basename(ruta))[0]
+    return nombre.replace("_", " ").title()
+
+
+def analizar_letra(tokenizador, texto, titulo=None):
+    """Corre el pipeline completo (tokenización → métrica → CFG → DCG) sobre una letra."""
     print()
+    if titulo:
+        print(_linea("█"))
+        print(f" ♪  {titulo}")
+        print(_linea("█"))
     print(" Letra analizada:")
-    print(f"   {texto}\n")
+    print(f"   {texto.strip()}\n")
 
     tokens = mostrar_tokens(tokenizador, texto)
     mostrar_metrica(tokenizador, tokens)
@@ -186,6 +202,27 @@ def main(argv=None):
         versos_palabras, etiquetas, arboles, modo = resultado
         mostrar_verificacion_rima(versos_palabras, etiquetas, arboles, modo)
     print()
+
+
+def main(argv=None):
+    argv = argv if argv is not None else sys.argv
+    tokenizador = Tokenizador()
+
+    # Con argumento (archivo o '-'): analiza esa única letra.
+    if len(argv) >= 2:
+        analizar_letra(tokenizador, cargar_texto(argv))
+        return
+
+    # Sin argumentos: analiza todas las canciones de data/, una tras otra.
+    canciones = listar_canciones()
+    if not canciones:
+        analizar_letra(tokenizador, LETRA_DEMO, "Letra demo")
+        return
+
+    for ruta in canciones:
+        with open(ruta, "r", encoding="utf-8") as f:
+            texto = f.read()
+        analizar_letra(tokenizador, texto, titulo_desde_ruta(ruta))
 
 
 if __name__ == "__main__":
