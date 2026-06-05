@@ -39,6 +39,10 @@ from src.ambiguedad import (
     reportar_ambiguedad_estructural,
     reportar_ambiguedad_lexica,
 )
+from src.pcfg import (
+    reporte_ranking,
+    reporte_desglose_ganador,
+)
 
 #Para empezar xd
 LETRA_DEMO = (
@@ -182,6 +186,25 @@ def mostrar_ambiguedad(versos_palabras, arboles, modo):
     print(reportar_ambiguedad_lexica(versos_palabras))
 
 
+def mostrar_pcfg(arboles):
+    """Fase 7: asigna probabilidades a cada árbol y elige el más plausible."""
+    print()
+    print(_linea("═"))
+    print(" FASE 7 · DESAMBIGUACIÓN PROBABILÍSTICA (PCFG)")
+    print(_linea("═"))
+
+    if not arboles:
+        print(" (no hay árboles para evaluar con la PCFG)")
+        return
+
+    print()
+    print(reporte_ranking(arboles))
+
+    if len(arboles) > 1:
+        print()
+        print(reporte_desglose_ganador(arboles))
+
+
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 
 
@@ -221,6 +244,7 @@ def analizar_letra(tokenizador, texto, titulo=None):
         versos_palabras, etiquetas, arboles, modo = resultado
         mostrar_verificacion_rima(versos_palabras, etiquetas, arboles, modo)
         mostrar_ambiguedad(versos_palabras, arboles, modo)
+        mostrar_pcfg(arboles)
     print()
 
 
