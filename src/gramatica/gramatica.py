@@ -124,9 +124,7 @@ gramatica_con_libre = {
         ['Verso', 'EstrofaLibre'],
         ['Verso'],
     ],
-    'Verso': [
-        ['A'], ['B'], ['C'], ['D'], ['E'],
-    ],
+    'Verso': [[letra] for letra in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'],
 }
 
 
