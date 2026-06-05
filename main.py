@@ -35,6 +35,10 @@ from src.gramatica import (
 )
 from src.rima import secuencia_rimas, describir_esquema
 from src.unificacion import verificar_esquema, filtrar_arboles_validos
+from src.ambiguedad import (
+    reportar_ambiguedad_estructural,
+    reportar_ambiguedad_lexica,
+)
 
 #Para empezar xd
 LETRA_DEMO = (
@@ -163,6 +167,21 @@ def mostrar_verificacion_rima(versos_palabras, etiquetas, arboles, modo):
             print(f"   ✓ {nombre_esquema(a)}")
 
 
+def mostrar_ambiguedad(versos_palabras, arboles, modo):
+    """Fase 6: reporta ambigüedad ESTRUCTURAL (cuarteto vs dos pareados)
+    y LÉXICA (jerga colombiana polisémica como 'vuelta', 'parcero', ...)."""
+    print()
+    print(_linea("═"))
+    print(" FASE 6 · MANEJO DE AMBIGÜEDAD")
+    print(_linea("═"))
+
+    print("\n ── Ambigüedad estructural ──")
+    print(reportar_ambiguedad_estructural(arboles, modo))
+
+    print("\n ── Ambigüedad léxica (jerga colombiana) ──")
+    print(reportar_ambiguedad_lexica(versos_palabras))
+
+
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 
 
@@ -201,6 +220,7 @@ def analizar_letra(tokenizador, texto, titulo=None):
     if resultado:
         versos_palabras, etiquetas, arboles, modo = resultado
         mostrar_verificacion_rima(versos_palabras, etiquetas, arboles, modo)
+        mostrar_ambiguedad(versos_palabras, arboles, modo)
     print()
 
 
