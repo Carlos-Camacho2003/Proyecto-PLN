@@ -1,11 +1,11 @@
 """
-Pruebas de la Fase 5 — DCG + unificación de rimas.
+Pruebas de la unificación de rimas (DCG).
 
 Demuestra el entregable pedido:
     "rechaza AAAA si los versos no riman entre sí; acepta el esquema correcto."
 
 Correr desde la raiz del proyecto:
-    python tests/test_fase5.py
+    python tests/test_unificacion.py
 """
 
 from __future__ import annotations
@@ -108,7 +108,7 @@ def test_filtrado_arboles():
 
 def main():
     print("=" * 64)
-    print(" PRUEBAS - Fase 5 (DCG + unificación de rimas)")
+    print(" PRUEBAS - Unificación de rimas (DCG)")
     print("=" * 64)
     test_unificacion_basica()
     test_acepta_esquema_correcto()

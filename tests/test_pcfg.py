@@ -1,8 +1,8 @@
 """
-Pruebas de la Fase 7 — PCFG y desambiguación probabilística.
+Pruebas de la PCFG y la desambiguación probabilística.
 
-Demuestra el entregable del ROADMAP:
-    "elige el esquema métrico más plausible del Ejemplo 2"
+Objetivo:
+    "elige el esquema métrico más plausible"
     (cuarteto vs dos pareados ante AABB / AAAA ambiguos)
 
 Cubre:
@@ -13,7 +13,7 @@ Cubre:
     reporte_ranking / desglose     → las cadenas de texto contienen lo esperado
 
 Correr desde la raíz del proyecto:
-    python tests/test_fase7.py
+    python tests/test_pcfg.py
 """
 
 from __future__ import annotations
@@ -124,7 +124,7 @@ def test_probabilidad_arbol():
 
 
 # ════════════════════════════════════════════════════════════════════════════ #
-# 4. Elección del mejor árbol (entregable del ROADMAP)
+# 4. Elección del mejor árbol (objetivo de la PCFG)
 # ════════════════════════════════════════════════════════════════════════════ #
 
 def test_eleccion():
@@ -183,7 +183,7 @@ def test_reporte():
 
 def main():
     print("=" * 64)
-    print(" PRUEBAS - Fase 7 (PCFG + desambiguación probabilística)")
+    print(" PRUEBAS - PCFG (desambiguación probabilística)")
     print("=" * 64)
     test_validacion_pcfg()
     test_probabilidad_regla()

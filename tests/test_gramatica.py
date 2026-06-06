@@ -1,9 +1,8 @@
 """
-Pruebas de la Fase 3 — CFG + Parser de esquemas de rima.
+Pruebas de la gramática CFG + parser tipo Chart (esquemas de rima).
 
 Correr desde la raiz del proyecto:
-    python tests/test_fase3.py
-(o con pytest si esta instalado:  pytest -q)
+    python tests/test_gramatica.py
 """
 
 from __future__ import annotations

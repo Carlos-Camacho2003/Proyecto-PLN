@@ -1,5 +1,5 @@
 """
-Pruebas de la Fase 6 — Manejo de ambigüedad (estructural + léxica).
+Pruebas del manejo de ambigüedad (estructural + léxica).
 
 Cubre:
     - jerga.py            : cargar_jerga, consultar, es_polisemica, palabras_registradas
@@ -9,11 +9,11 @@ Cubre:
                             reporte_completo
 
 Los tests de reporte estructural usan un Nodo falso (stub) para no depender del
-parser de la Fase 4. Los tests léxicos usan un JSON mínimo temporal y, al final,
-el JSON real de data/.
+parser de la gramática. Los tests léxicos usan un JSON mínimo temporal y, al
+final, el JSON real de data/.
 
 Correr desde la raíz del proyecto:
-    python tests/test_fase6.py
+    python tests/test_ambiguedad.py
 """
 
 from __future__ import annotations
@@ -261,7 +261,7 @@ def test_json_real():
 
 def main():
     print("=" * 64)
-    print(" PRUEBAS - Fase 6 (Manejo de ambigüedad)")
+    print(" PRUEBAS - Manejo de ambigüedad (estructural + léxica)")
     print("=" * 64)
     jerga_mini = _crear_jerga_mini()
     try:
