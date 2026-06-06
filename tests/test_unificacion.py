@@ -18,7 +18,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-from src.unificacion import unificar_rima, verificar_esquema, filtrar_arboles_validos
+from src.unificacion import (
+    unificar_rima, verificar_esquema, filtrar_arboles_validos, filtrar_hipotesis,
+)
 from src.rima import secuencia_rimas
 from src.gramatica import gramatica, gramatica_con_libre, analizar_con_fallback, nombre_esquema
 
@@ -106,6 +108,38 @@ def test_filtrado_arboles():
         print(f"     árbol válido: {nombre_esquema(a)}")
 
 
+def test_hipotesis_y_rechazo():
+    print("\n[Generacion de hipotesis + RECHAZO activo de la DCG]")
+    # Estrofa ABBA real: solo la hipotesis ABBA unifica; el resto se rechaza.
+    versos_abba = [
+        ["en", "la", "locura"],   # -ura
+        ["del", "sinsonte"],      # -onte
+        ["en", "el", "monte"],    # -onte
+        ["y", "la", "pavura"],    # -ura
+    ]
+    cons, rech = filtrar_hipotesis(versos_abba, gramatica, modo="consonante")
+    ok = [e for _, e, _ in cons]
+    no = [e for _, e, _ in rech]
+    check(ok == ["ABBA"], f"ABBA real -> solo ABBA consistente (obtuve {ok})")
+    check(set(no) == {"AABB", "ABAB", "AAAA"},
+          "ABBA real -> AABB, ABAB y AAAA RECHAZADOS por la DCG")
+
+    # Estrofa AABB real: solo AABB sobrevive.
+    versos_aabb = [
+        ["respiro", "al", "andar"], ["es", "mi", "hogar"],
+        ["dentro", "del", "corazón"], ["vibra", "con", "tu", "razón"],
+    ]
+    cons, _ = filtrar_hipotesis(versos_aabb, gramatica, modo="consonante")
+    check([e for _, e, _ in cons] == ["AABB"], "AABB real -> solo AABB consistente")
+
+    # Cuatro rimas distintas: NINGUNA hipotesis clasica unifica -> estrofa libre.
+    versos_libre = [["uno", "camina"], ["dos", "corre"],
+                    ["tres", "salta"], ["cuatro", "vuela"]]
+    cons, rech = filtrar_hipotesis(versos_libre, gramatica, modo="consonante")
+    check(cons == [], "4 rimas distintas -> ninguna hipotesis sobrevive (libre)")
+    check(len(rech) == 4, "se rechazan las 4 hipotesis de cuarteto")
+
+
 def main():
     print("=" * 64)
     print(" PRUEBAS - Unificación de rimas (DCG)")
@@ -114,6 +148,7 @@ def main():
     test_acepta_esquema_correcto()
     test_rechaza_aaaa_falso()
     test_filtrado_arboles()
+    test_hipotesis_y_rechazo()
 
     print("\n" + "=" * 64)
     total = _RESULTADOS["ok"] + _RESULTADOS["fail"]

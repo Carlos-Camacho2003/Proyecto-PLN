@@ -159,7 +159,55 @@ def verificar_esquema(etiquetas, versos, modo="consonante", detalle=False):
 
 
 # --------------------------------------------------------------------------- #
-# 3. Filtrado de árboles: descarta los que la DCG considera inconsistentes
+# 3. Generación y filtrado de HIPÓTESIS de esquema
+# --------------------------------------------------------------------------- #
+# En vez de derivar un único etiquetado a partir de las rimas (que la DCG
+# luego confirmaría siempre), la CFG PROPONE todos los esquemas clásicos
+# posibles para una estrofa de n versos y la DCG RECHAZA los que no unifican
+# con las rimas reales. Así la verificación deja de ser una tautología: para
+# una estrofa ABBA, descarta activamente las hipótesis AABB, ABAB y AAAA.
+# --------------------------------------------------------------------------- #
+def esquemas_candidatos(gramatica, n, no_terminales=("Cuarteto", "Terceto", "Pareado")):
+    """
+    Esquemas clásicos (puramente terminales) de longitud `n` que la CFG puede
+    generar — las HIPÓTESIS de estructura para una estrofa de `n` versos.
+
+    Se leen directamente de las producciones de `gramatica` (no se hardcodean),
+    así que si se añade una forma nueva a la CFG, aparece aquí sola.
+    Devuelve una lista de tuplas (no_terminal, esquema) con esquema como tupla
+    de etiquetas, p. ej. ("Cuarteto", ('A','B','B','A')).
+    """
+    candidatos = []
+    for lhs in no_terminales:
+        for rhs in gramatica.get(lhs, []):
+            if len(rhs) == n and all(simbolo not in gramatica for simbolo in rhs):
+                candidatos.append((lhs, tuple(rhs)))
+    return candidatos
+
+
+def filtrar_hipotesis(versos, gramatica, modo="consonante"):
+    """
+    Somete TODAS las hipótesis de esquema clásico para `versos` a la DCG.
+
+    Para cada esquema candidato (AABB, ABAB, ABBA, AAAA, ...) llama a
+    `verificar_esquema` contra las rimas reales. Devuelve dos listas:
+
+        consistentes, rechazados
+
+    donde cada elemento es (no_terminal, esquema_str, resultado_detallado).
+    Por construcción a lo sumo UNO sobrevive (los esquemas imponen particiones
+    de rima distintas); si ninguno unifica, la estrofa es libre.
+    """
+    consistentes, rechazados = [], []
+    for lhs, rhs in esquemas_candidatos(gramatica, len(versos)):
+        resultado = verificar_esquema(list(rhs), versos, modo=modo, detalle=True)
+        item = (lhs, "".join(rhs), resultado)
+        (consistentes if resultado["valido"] else rechazados).append(item)
+    return consistentes, rechazados
+
+
+# --------------------------------------------------------------------------- #
+# 4. Filtrado de árboles: descarta los que la DCG considera inconsistentes
 # --------------------------------------------------------------------------- #
 def filtrar_arboles_validos(arboles, versos, modo="consonante"):
     """

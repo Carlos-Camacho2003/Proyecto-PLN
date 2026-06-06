@@ -46,6 +46,7 @@ from src.ambiguedad import (
 )
 from src.pcfg import (
     mejor_arbol,
+    probabilidad_arbol,
     reporte_ranking,
     reporte_desglose_ganador,
 )
@@ -256,11 +257,22 @@ DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 
 
 def cargar_texto(argv):
-    """Lee la letra desde un archivo (argv[1]) o desde stdin (argv[1] == '-')."""
+    """Lee la letra desde un archivo (argv[1]) o desde stdin (argv[1] == '-').
+
+    Si el archivo no existe, no se puede abrir o no es texto UTF-8 válido,
+    informa con un mensaje claro y termina sin volcar una traza de error."""
     if argv[1] == "-":
         return sys.stdin.read()
-    with open(argv[1], "r", encoding="utf-8") as f:
-        return f.read()
+    try:
+        with open(argv[1], "r", encoding="utf-8") as f:
+            return f.read()
+    except OSError as e:
+        motivo = e.strerror or str(e)
+        print(f" Error: no se pudo abrir el archivo '{argv[1]}' ({motivo}).")
+        sys.exit(1)
+    except UnicodeDecodeError:
+        print(f" Error: el archivo '{argv[1]}' no parece ser texto UTF-8 válido.")
+        sys.exit(1)
 
 
 def listar_canciones():
@@ -282,7 +294,7 @@ def datos_estrofa(versos):
     versos_palabras = [
         [t.texto for t in v if t.tipo in ("PALABRA", "CONTRACCION")] for v in versos
     ]
-    _, _, arboles, modo_gram, modo_rima = elegir_analisis_rima(versos_palabras)
+    etiquetas, mapa, arboles, modo_gram, modo_rima = elegir_analisis_rima(versos_palabras)
 
     silabas = [
         contar_silabas_verso([t.texto for t in v
@@ -290,34 +302,73 @@ def datos_estrofa(versos):
         for v in versos
     ]
 
+    # Esquema de rima compacto: con las claves si hay pocas rimas distintas.
+    distintas = []
+    for e in etiquetas:
+        if e not in distintas:
+            distintas.append(e)
+    if 0 < len(distintas) <= 5:
+        claves = "  ".join(f"{e}=-{mapa[e]}" for e in distintas)
+        esquema = f"{''.join(etiquetas)}  ({claves})"
+    else:
+        esquema = f"{''.join(etiquetas)}  ({len(distintas)} rimas distintas)"
+
+    # Estructura CFG; si es ambigua, la lectura que elige la PCFG y su probabilidad.
     ambigua = (modo_gram == "clasica" and len(arboles) > 1)
     if not arboles:
-        estructura, lecturas = "(no reconocida)", []
-    elif ambigua:
-        estructura = nombre_esquema(mejor_arbol(arboles))
-        lecturas = [nombre_esquema(a) for a in arboles]
+        estructura, lecturas, prob = "(no reconocida)", [], 0.0
     else:
-        estructura, lecturas = nombre_esquema(arboles[0]), []
+        ganador = mejor_arbol(arboles) if ambigua else arboles[0]
+        estructura = nombre_esquema(ganador)
+        lecturas = [nombre_esquema(a) for a in arboles] if ambigua else []
+        prob = probabilidad_arbol(ganador)
 
-    jerga = sorted({d["palabra"].lower() for d in analizar_ambiguedad_lexica(versos_palabras)})
+    # DCG: hipótesis clásicas que la unificación acepta / rechaza.
+    consistentes, rechazados = filtrar_hipotesis(versos_palabras, gramatica, modo=modo_rima)
+    dcg = {
+        "consistente": [e for _, e, _ in consistentes],
+        "rechazadas": [e for _, e, _ in rechazados],
+    }
+
+    # Jerga polisémica con sus significados (deduplicada, en minúsculas).
+    jerga = {}
+    for item in analizar_ambiguedad_lexica(versos_palabras):
+        palabra = item["palabra"].lower()
+        if palabra not in jerga:
+            jerga[palabra] = [a["significado"] for a in item["acepciones"]]
 
     return {
         "n_versos": len(versos), "silabas": silabas, "modo_rima": modo_rima,
-        "estructura": estructura, "ambigua": ambigua, "lecturas": lecturas,
-        "jerga": jerga,
+        "esquema": esquema, "estructura": estructura, "ambigua": ambigua,
+        "lecturas": lecturas, "prob": prob, "dcg": dcg, "jerga": jerga,
     }
 
 
 def imprimir_estrofa_breve(n, d):
     silabas = "·".join(str(s) for s in d["silabas"])
-    print(f"\n ▶ Estrofa {n} ({d['n_versos']}v) · {silabas} síl · rima {d['modo_rima']}")
+    print(f"\n ▶ Estrofa {n} ({d['n_versos']} versos) · {silabas} síl · rima {d['modo_rima']}")
+    print(f"     esquema: {d['esquema']}")
+
     if d["ambigua"]:
         print(f"     CFG: ambigua → {' / '.join(d['lecturas'])}")
-        print(f"     PCFG elige: {d['estructura']}")
+        print(f"     PCFG elige: {d['estructura']}  (P={d['prob']:.4f})")
     else:
-        print(f"     CFG: {d['estructura']}")
+        extra = f"  (P={d['prob']:.4f})" if d["prob"] > 0 else ""
+        print(f"     CFG: {d['estructura']}{extra}")
+
+    dcg = d["dcg"]
+    if dcg["consistente"]:
+        linea = f"     DCG: ✓ {dcg['consistente'][0]} unifica con las rimas"
+        if dcg["rechazadas"]:
+            linea += f"; rechaza {', '.join(dcg['rechazadas'])}"
+        print(linea)
+    elif dcg["rechazadas"]:
+        print("     DCG: ninguna hipótesis clásica unifica → estrofa libre")
+
     if d["jerga"]:
-        print(f"     jerga: {', '.join(d['jerga'])}")
+        print("     jerga polisémica:")
+        for palabra, significados in d["jerga"].items():
+            print(f"       · {palabra}: {'  ·  '.join(significados)}")
 
 
 def imprimir_resumen(titulo, hallazgos):
