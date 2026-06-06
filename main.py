@@ -7,6 +7,8 @@ Pipeline:
     [3] Rima: terminación fonémica y secuencia simbólica de rima
     [4] CFG + parser tipo Chart (Earley): estructura métrica y ambigüedad
     [5] DCG + unificación: verifica que las rimas reales sean consistentes
+    [6] Ambigüedad estructural (cuarteto vs dos pareados) y léxica (jerga)
+    [7] PCFG: elige el esquema métrico más probable y reporta el ranking
 
 Uso:
     python main.py                 # corre con la letra de demostración
