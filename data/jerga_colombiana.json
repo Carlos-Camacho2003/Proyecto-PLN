@@ -1,8 +1,10 @@
 {
-    "_comentario": "Diccionario de jerga colombiana polisémica — Fase 6",
-    "_version": "1.0",
+    "_comentario": "Diccionario de jerga colombiana polisémica",
+    "_version": "1.1",
+    "_formato": "Cada palabra tiene 'acepciones' (id, significado, ejemplo, region, registro) y, opcionalmente, 'variantes' (plurales/genero/grafias que se reconocen como la misma palabra).",
 
     "vuelta": {
+        "variantes": ["vueltas"],
         "acepciones": [
             {
                 "id": 1,
@@ -22,6 +24,7 @@
     },
 
     "parcero": {
+        "variantes": ["parceros", "parcera", "parceras"],
         "acepciones": [
             {
                 "id": 1,
@@ -41,6 +44,7 @@
     },
 
     "parce": {
+        "variantes": ["parces"],
         "acepciones": [
             {
                 "id": 1,
@@ -60,6 +64,7 @@
     },
 
     "llave": {
+        "variantes": ["llaves"],
         "acepciones": [
             {
                 "id": 1,
@@ -79,6 +84,7 @@
     },
 
     "chimba": {
+        "variantes": ["chimbas"],
         "acepciones": [
             {
                 "id": 1,
@@ -124,6 +130,7 @@
     },
 
     "camello": {
+        "variantes": ["camellos"],
         "acepciones": [
             {
                 "id": 1,
@@ -143,6 +150,7 @@
     },
 
     "man": {
+        "variantes": ["manes"],
         "acepciones": [
             {
                 "id": 1,
@@ -162,6 +170,7 @@
     },
 
     "billete": {
+        "variantes": ["billetes"],
         "acepciones": [
             {
                 "id": 1,
@@ -200,6 +209,7 @@
     },
 
     "vacano": {
+        "variantes": ["vacana", "vacanos", "vacanas", "bacano", "bacana", "bacanos", "bacanas"],
         "acepciones": [
             {
                 "id": 1,
@@ -231,6 +241,140 @@
                 "id": 2,
                 "significado": "engañar / tomar del pelo",
                 "ejemplo": "me estás mamando, eso no es verdad",
+                "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "sapo": {
+        "variantes": ["sapos", "sapa", "sapas"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "soplón / delator / chismoso",
+                "ejemplo": "no sea sapo y quédese callado",
+                "region": "nacional",
+                "registro": "informal"
+            },
+            {
+                "id": 2,
+                "significado": "anfibio de piel rugosa",
+                "ejemplo": "había un sapo junto a la quebrada",
+                "region": "nacional",
+                "registro": "estándar"
+            }
+        ]
+    },
+
+    "vaina": {
+        "variantes": ["vainas"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "cosa / objeto indeterminado",
+                "ejemplo": "pásame esa vaina de ahí",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "problema / situación complicada",
+                "ejemplo": "se metió en una vaina seria",
+                "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "rumba": {
+        "variantes": ["rumbas"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "fiesta / parranda / celebración",
+                "ejemplo": "esta noche hay rumba en el barrio",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "baile y ritmo musical de origen caribeño",
+                "ejemplo": "se sabe toda la rumba de memoria",
+                "region": "nacional",
+                "registro": "estándar"
+            }
+        ]
+    },
+
+    "boleta": {
+        "variantes": ["boletas"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "entrada / tiquete para un evento",
+                "ejemplo": "ya compré la boleta del concierto",
+                "region": "nacional",
+                "registro": "estándar"
+            },
+            {
+                "id": 2,
+                "significado": "algo vergonzoso / ridículo / que da pena ajena",
+                "ejemplo": "qué boleta lo que hizo en la fiesta",
+                "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "verraco": {
+        "variantes": ["berraco", "verracos", "berracos", "verraca", "berraca"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "persona valiente / capaz / echada pa'lante",
+                "ejemplo": "ese man es un verraco para el trabajo",
+                "region": "paisa",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "cerdo macho reproductor",
+                "ejemplo": "el verraco anda suelto en la finca",
+                "region": "nacional",
+                "registro": "estándar"
+            },
+            {
+                "id": 3,
+                "significado": "bravo / enojado / de mal genio",
+                "ejemplo": "está verraco porque le robaron",
+                "region": "paisa",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "gallo": {
+        "variantes": ["gallos"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "ave macho de corral",
+                "ejemplo": "el gallo cantó al amanecer",
+                "region": "nacional",
+                "registro": "estándar"
+            },
+            {
+                "id": 2,
+                "significado": "quiebre involuntario de la voz al cantar",
+                "ejemplo": "se le salió un gallo en la nota alta",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 3,
+                "significado": "hombre bravucón / peleador",
+                "ejemplo": "se las da de gallo en el barrio",
                 "region": "nacional",
                 "registro": "informal"
             }
