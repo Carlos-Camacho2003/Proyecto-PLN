@@ -1,380 +1,237 @@
 {
-    "_comentario": "Diccionario de jerga colombiana polisémica",
-    "_version": "1.1",
-    "_formato": "Cada palabra tiene 'acepciones' (id, significado, ejemplo, region, registro) y, opcionalmente, 'variantes' (plurales/genero/grafias que se reconocen como la misma palabra).",
+    "_comentario": "Jerga colombiana polisémica que aparece en las letras del corpus (data/*.txt)",
+    "_version": "2.1",
+    "_formato": "Cada palabra tiene 'acepciones' (id, significado, ejemplo, region, registro) y, opcionalmente, 'variantes' (plurales/genero que se reconocen como la misma palabra).",
 
-    "vuelta": {
-        "variantes": ["vueltas"],
+    "perro": {
+        "variantes": ["perros", "perra", "perras"],
         "acepciones": [
             {
                 "id": 1,
-                "significado": "asunto / encargo / negocio",
-                "ejemplo": "tengo una vuelta que hacer en el centro",
-                "region": "paisa",
-                "registro": "coloquial"
-            },
-            {
-                "id": 2,
-                "significado": "venganza / represalia",
-                "ejemplo": "esa vuelta me la cobran caro",
+                "significado": "crack / el mejor / muy hábil en lo suyo (admiración)",
+                "ejemplo": "ese man es un perro pa'l micrófono",
                 "region": "urbano",
-                "registro": "informal"
-            }
-        ]
-    },
-
-    "parcero": {
-        "variantes": ["parceros", "parcera", "parceras"],
-        "acepciones": [
-            {
-                "id": 1,
-                "significado": "amigo cercano / compañero de confianza",
-                "ejemplo": "ese es mi parcero de toda la vida",
-                "region": "paisa",
                 "registro": "coloquial"
             },
             {
                 "id": 2,
-                "significado": "apelativo genérico para cualquier persona",
-                "ejemplo": "parcero, ¿qué más?",
+                "significado": "animal doméstico de cuatro patas",
+                "ejemplo": "el perro ladró toda la noche",
+                "region": "nacional",
+                "registro": "estándar"
+            },
+            {
+                "id": 3,
+                "significado": "infiel / mujeriego",
+                "ejemplo": "ese novio le salió perro",
                 "region": "nacional",
                 "registro": "informal"
             }
         ]
     },
 
-    "parce": {
-        "variantes": ["parces"],
+    "bravo": {
+        "variantes": ["bravos", "brava", "bravas"],
         "acepciones": [
             {
                 "id": 1,
-                "significado": "amigo / apócope de parcero",
-                "ejemplo": "¿qué más, parce?",
-                "region": "paisa",
-                "registro": "coloquial"
-            },
-            {
-                "id": 2,
-                "significado": "apelativo para desconocidos",
-                "ejemplo": "parce, me ayuda con esto",
+                "significado": "bravucón / que se las da de duro / fiero",
+                "ejemplo": "se las dan de malos bravos",
                 "region": "nacional",
-                "registro": "informal"
-            }
-        ]
-    },
-
-    "llave": {
-        "variantes": ["llaves"],
-        "acepciones": [
-            {
-                "id": 1,
-                "significado": "amigo cercano / aliado del barrio",
-                "ejemplo": "ese man es mi llave del barrio",
-                "region": "bogotano",
                 "registro": "coloquial"
             },
             {
                 "id": 2,
-                "significado": "herramienta para abrir cerraduras",
-                "ejemplo": "perdí la llave de la casa",
+                "significado": "enojado / de mal genio",
+                "ejemplo": "está bravo porque le contestaron",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 3,
+                "significado": "agitado / peligroso (referido al agua o al mar)",
+                "ejemplo": "el río baja bravo hoy",
                 "region": "nacional",
                 "registro": "estándar"
             }
         ]
     },
 
-    "chimba": {
-        "variantes": ["chimbas"],
+    "banda": {
+        "variantes": ["bandas"],
         "acepciones": [
             {
                 "id": 1,
-                "significado": "algo muy bueno / excelente / genial",
-                "ejemplo": "esa canción está chimba",
-                "region": "paisa",
-                "registro": "coloquial"
-            },
-            {
-                "id": 2,
-                "significado": "expresión de rechazo o cosa de mala calidad",
-                "ejemplo": "qué chimba de idea tan mala",
-                "region": "nacional",
-                "registro": "informal"
-            }
-        ]
-    },
-
-    "nota": {
-        "acepciones": [
-            {
-                "id": 1,
-                "significado": "algo bueno / chévere / de calidad",
-                "ejemplo": "eso está muy nota",
-                "region": "bogotano",
-                "registro": "coloquial"
-            },
-            {
-                "id": 2,
-                "significado": "persona conocida / figura respetada del barrio",
-                "ejemplo": "ese man es una nota en el barrio",
+                "significado": "pandilla / combo / grupo delictivo del barrio",
+                "ejemplo": "andan en banda por toda la cuadra",
                 "region": "urbano",
                 "registro": "informal"
             },
             {
+                "id": 2,
+                "significado": "grupo musical",
+                "ejemplo": "toca el bajo en una banda de rock",
+                "region": "nacional",
+                "registro": "estándar"
+            },
+            {
                 "id": 3,
-                "significado": "mensaje escrito / billete de papel",
-                "ejemplo": "me dejó una nota en la puerta",
+                "significado": "franja / cinta / lado",
+                "ejemplo": "llevaba una banda roja en el brazo",
                 "region": "nacional",
                 "registro": "estándar"
             }
         ]
     },
 
-    "camello": {
-        "variantes": ["camellos"],
+    "bulla": {
+        "variantes": ["bullas"],
         "acepciones": [
             {
                 "id": 1,
-                "significado": "trabajo / empleo / labor",
-                "ejemplo": "consiguió un camello en la empresa",
+                "significado": "ruido / escándalo / algarabía",
+                "ejemplo": "no formen tanta bulla a esta hora",
                 "region": "nacional",
                 "registro": "coloquial"
             },
             {
                 "id": 2,
-                "significado": "animal del desierto de la familia camélidos",
-                "ejemplo": "vimos un camello en el zoológico",
+                "significado": "alboroto para llamar la atención / fama pasajera",
+                "ejemplo": "le metieron mucha bulla al artista nuevo",
+                "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "alzado": {
+        "variantes": ["alzados", "alzada", "alzadas"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "altanero / arrogante / insolente",
+                "ejemplo": "anda alzado desde que le entró plata",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "sublevado / rebelde / levantado en armas",
+                "ejemplo": "los alzados se tomaron el pueblo",
                 "region": "nacional",
                 "registro": "estándar"
             }
         ]
     },
 
-    "man": {
-        "variantes": ["manes"],
+    "raza": {
+        "variantes": ["razas"],
         "acepciones": [
             {
                 "id": 1,
-                "significado": "tipo / individuo / persona cualquiera",
-                "ejemplo": "ese man no me cae bien",
-                "region": "nacional",
-                "registro": "coloquial"
-            },
-            {
-                "id": 2,
-                "significado": "novio / pareja sentimental",
-                "ejemplo": "ese es el man de ella",
-                "region": "nacional",
-                "registro": "informal"
-            }
-        ]
-    },
-
-    "billete": {
-        "variantes": ["billetes"],
-        "acepciones": [
-            {
-                "id": 1,
-                "significado": "dinero / plata en efectivo",
-                "ejemplo": "tiene mucho billete ese man",
-                "region": "nacional",
-                "registro": "coloquial"
-            },
-            {
-                "id": 2,
-                "significado": "papel moneda de denominación específica",
-                "ejemplo": "pagó con un billete de cincuenta",
-                "region": "nacional",
-                "registro": "estándar"
-            }
-        ]
-    },
-
-    "pinta": {
-        "acepciones": [
-            {
-                "id": 1,
-                "significado": "ropa / vestimenta / look / outfit",
-                "ejemplo": "qué pinta tan bacana llevas hoy",
-                "region": "nacional",
-                "registro": "coloquial"
-            },
-            {
-                "id": 2,
-                "significado": "apariencia física / aspecto general",
-                "ejemplo": "tiene pinta de malandro",
-                "region": "nacional",
-                "registro": "informal"
-            }
-        ]
-    },
-
-    "vacano": {
-        "variantes": ["vacana", "vacanos", "vacanas", "bacano", "bacana", "bacanos", "bacanas"],
-        "acepciones": [
-            {
-                "id": 1,
-                "significado": "persona chévere / buena gente / bacana",
-                "ejemplo": "ese parce es muy vacano",
-                "region": "nacional",
-                "registro": "coloquial"
-            },
-            {
-                "id": 2,
-                "significado": "algo de buena calidad / que está bien hecho",
-                "ejemplo": "qué vacano quedó ese diseño",
-                "region": "nacional",
-                "registro": "informal"
-            }
-        ]
-    },
-
-    "mamar": {
-        "acepciones": [
-            {
-                "id": 1,
-                "significado": "molestar / fastidiar / chiflar",
-                "ejemplo": "deja de mamar gallo",
-                "region": "nacional",
-                "registro": "coloquial"
-            },
-            {
-                "id": 2,
-                "significado": "engañar / tomar del pelo",
-                "ejemplo": "me estás mamando, eso no es verdad",
-                "region": "nacional",
-                "registro": "informal"
-            }
-        ]
-    },
-
-    "sapo": {
-        "variantes": ["sapos", "sapa", "sapas"],
-        "acepciones": [
-            {
-                "id": 1,
-                "significado": "soplón / delator / chismoso",
-                "ejemplo": "no sea sapo y quédese callado",
-                "region": "nacional",
-                "registro": "informal"
-            },
-            {
-                "id": 2,
-                "significado": "anfibio de piel rugosa",
-                "ejemplo": "había un sapo junto a la quebrada",
-                "region": "nacional",
-                "registro": "estándar"
-            }
-        ]
-    },
-
-    "vaina": {
-        "variantes": ["vainas"],
-        "acepciones": [
-            {
-                "id": 1,
-                "significado": "cosa / objeto indeterminado",
-                "ejemplo": "pásame esa vaina de ahí",
-                "region": "nacional",
-                "registro": "coloquial"
-            },
-            {
-                "id": 2,
-                "significado": "problema / situación complicada",
-                "ejemplo": "se metió en una vaina seria",
-                "region": "nacional",
-                "registro": "informal"
-            }
-        ]
-    },
-
-    "rumba": {
-        "variantes": ["rumbas"],
-        "acepciones": [
-            {
-                "id": 1,
-                "significado": "fiesta / parranda / celebración",
-                "ejemplo": "esta noche hay rumba en el barrio",
-                "region": "nacional",
-                "registro": "coloquial"
-            },
-            {
-                "id": 2,
-                "significado": "baile y ritmo musical de origen caribeño",
-                "ejemplo": "se sabe toda la rumba de memoria",
-                "region": "nacional",
-                "registro": "estándar"
-            }
-        ]
-    },
-
-    "boleta": {
-        "variantes": ["boletas"],
-        "acepciones": [
-            {
-                "id": 1,
-                "significado": "entrada / tiquete para un evento",
-                "ejemplo": "ya compré la boleta del concierto",
-                "region": "nacional",
-                "registro": "estándar"
-            },
-            {
-                "id": 2,
-                "significado": "algo vergonzoso / ridículo / que da pena ajena",
-                "ejemplo": "qué boleta lo que hizo en la fiesta",
-                "region": "nacional",
-                "registro": "informal"
-            }
-        ]
-    },
-
-    "verraco": {
-        "variantes": ["berraco", "verracos", "berracos", "verraca", "berraca"],
-        "acepciones": [
-            {
-                "id": 1,
-                "significado": "persona valiente / capaz / echada pa'lante",
-                "ejemplo": "ese man es un verraco para el trabajo",
+                "significado": "la gente / el combo / los parceros del barrio",
+                "ejemplo": "un saludo pa' toda la raza",
                 "region": "paisa",
                 "registro": "coloquial"
             },
             {
                 "id": 2,
-                "significado": "cerdo macho reproductor",
-                "ejemplo": "el verraco anda suelto en la finca",
+                "significado": "conjunto con rasgos comunes / casta / etnia",
+                "ejemplo": "es un perro de raza fina",
+                "region": "nacional",
+                "registro": "estándar"
+            }
+        ]
+    },
+
+    "papa": {
+        "variantes": ["papas"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "apelativo afectuoso o de respeto (parce / jefe)",
+                "ejemplo": "papa, ¿qué más?",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "tubérculo básico de la comida colombiana",
+                "ejemplo": "almuerzo con papa y carne",
                 "region": "nacional",
                 "registro": "estándar"
             },
             {
                 "id": 3,
-                "significado": "bravo / enojado / de mal genio",
-                "ejemplo": "está verraco porque le robaron",
-                "region": "paisa",
+                "significado": "nada en absoluto (en la expresión 'ni papa')",
+                "ejemplo": "no entendió ni papa de la clase",
+                "region": "nacional",
                 "registro": "informal"
             }
         ]
     },
 
-    "gallo": {
-        "variantes": ["gallos"],
+    "cagado": {
+        "variantes": ["cagados"],
         "acepciones": [
             {
                 "id": 1,
-                "significado": "ave macho de corral",
-                "ejemplo": "el gallo cantó al amanecer",
+                "significado": "asustado / con miedo (estar cagado)",
+                "ejemplo": "cuando están solos caminan cagados",
                 "region": "nacional",
-                "registro": "estándar"
+                "registro": "informal"
             },
             {
                 "id": 2,
-                "significado": "quiebre involuntario de la voz al cantar",
-                "ejemplo": "se le salió un gallo en la nota alta",
+                "significado": "ensuciado / manchado (sentido literal)",
+                "ejemplo": "el zapato quedó todo cagado de barro",
+                "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "hembra": {
+        "variantes": ["hembras"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "mujer (apelativo; a veces mujer atractiva o pareja)",
+                "ejemplo": "esa hembra es la dueña de mi corazón",
                 "region": "nacional",
                 "registro": "coloquial"
             },
             {
+                "id": 2,
+                "significado": "individuo de sexo femenino de una especie animal",
+                "ejemplo": "la hembra del león cría sola a los cachorros",
+                "region": "nacional",
+                "registro": "estándar"
+            }
+        ]
+    },
+
+    "pieza": {
+        "variantes": ["piezas"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "habitación / cuarto",
+                "ejemplo": "se encerró en la pieza todo el día",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "parte / componente que encaja en un conjunto",
+                "ejemplo": "le falta una pieza al motor",
+                "region": "nacional",
+                "registro": "estándar"
+            },
+            {
                 "id": 3,
-                "significado": "hombre bravucón / peleador",
-                "ejemplo": "se las da de gallo en el barrio",
+                "significado": "persona de cuidado / sinvergüenza (ser una pieza)",
+                "ejemplo": "ese man es una pieza, no te fíes",
                 "region": "nacional",
                 "registro": "informal"
             }

@@ -277,14 +277,16 @@ def test_json_real():
     print("\n[Integración con data/jerga_colombiana.json]")
     j = cargar_jerga()
     check(isinstance(j, dict) and len(j) > 0, "el JSON real existe y carga con entradas")
-    check(es_polisemica("vuelta", j), "'vuelta' es polisémica en el JSON real")
-    check(es_polisemica("parcero", j), "'parcero' es polisémico en el JSON real")
+    check(es_polisemica("perro", j), "'perro' (Manicomio) es polisémica en el JSON real")
+    check(es_polisemica("banda", j), "'banda' (Falsedades) es polisémica en el JSON real")
 
-    # Robustez contra el JSON real (palabras nuevas + variantes + falso positivo).
-    check(es_polisemica("vaina", j), "palabra nueva 'vaina' es polisémica en el JSON real")
-    check(es_polisemica("verraco", j), "palabra nueva 'verraco' es polisémica")
-    check(es_polisemica("parceros", j), "plural 'parceros' reconocido contra el JSON real")
-    check(not es_polisemica("notas", j), "el verbo 'notas' NO se confunde con 'nota'")
+    # Robustez contra el JSON real: variantes que aparecen en las letras + falso positivo.
+    check(es_polisemica("bravos", j), "plural 'bravos' (Falsedades) reconocido (→ bravo)")
+    check(es_polisemica("alzados", j), "'alzados' (Falsedades) reconocido (→ alzado)")
+    check(es_polisemica("perros", j), "plural 'perros' reconocido (→ perro)")
+    check(es_polisemica("hembra", j), "'hembra' (Querer querernos) es polisémica")
+    check(es_polisemica("piezas", j), "plural 'piezas' (Querer querernos) reconocido (→ pieza)")
+    check(not es_polisemica("notas", j), "el verbo 'notas' (Manicomio) NO se marca como jerga")
 
     completo = True
     for palabra, entrada in j.items():
