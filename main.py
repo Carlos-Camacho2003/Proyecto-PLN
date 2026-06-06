@@ -15,7 +15,8 @@ Uso:
     python main.py archivo.txt     # analiza la letra contenida en un archivo
     python main.py -               # lee la letra desde la entrada estándar
 
-Versos: se separan por '/' o por salto de línea.
+Versos:   se separan por '/' o por salto de línea simple.
+Estrofas: se separan por una línea en blanco.
 """
 
 from __future__ import annotations
@@ -75,12 +76,11 @@ def mostrar_tokens(tokenizador, texto):
     return tokens
 
 
-def mostrar_metrica(tokenizador, tokens):
+def mostrar_metrica(versos):
     print()
     print(_linea("═"))
     print(" FASE 2 · MÉTRICA (silabeo + sinalefa + acento)")
     print(_linea("═"))
-    versos = tokenizador.separar_versos(tokens)
 
     for n, verso_tokens in enumerate(versos, start=1):
         palabras = [t.texto for t in verso_tokens
@@ -108,12 +108,11 @@ def mostrar_metrica(tokenizador, tokens):
         print(f"   Verso {n}: {c} sílabas ({etiqueta})")
 
 
-def mostrar_estructura(tokenizador, tokens):
+def mostrar_estructura(versos):
     print()
     print(_linea("═"))
     print(" FASE 3 · ESTRUCTURA MÉTRICA (CFG + Parser)")
     print(_linea("═"))
-    versos = tokenizador.separar_versos(tokens)
 
     versos_palabras = [
         [t.texto for t in v if t.tipo in ("PALABRA", "CONTRACCION")]
@@ -230,7 +229,13 @@ def titulo_desde_ruta(ruta):
 
 
 def analizar_letra(tokenizador, texto, titulo=None):
-    """Corre el pipeline completo (tokenización → métrica → CFG → DCG) sobre una letra."""
+    """Corre el pipeline completo sobre una letra, analizándola ESTROFA POR ESTROFA.
+
+    La tokenización (Fase 1) se hace sobre toda la letra; el resto del pipeline
+    (métrica, CFG, DCG, ambigüedad, PCFG) se aplica a cada estrofa por separado.
+    Así las etiquetas de rima reinician en A en cada estrofa y los cuartetos /
+    pareados reales pueden coincidir con la CFG (en vez de colapsar en una única
+    estrofa libre que abarca toda la canción)."""
     print()
     if titulo:
         print(_linea("█"))
@@ -240,13 +245,24 @@ def analizar_letra(tokenizador, texto, titulo=None):
     print(f"   {texto.strip()}\n")
 
     tokens = mostrar_tokens(tokenizador, texto)
-    mostrar_metrica(tokenizador, tokens)
-    resultado = mostrar_estructura(tokenizador, tokens)
-    if resultado:
-        versos_palabras, etiquetas, arboles, modo = resultado
-        mostrar_verificacion_rima(versos_palabras, etiquetas, arboles, modo)
-        mostrar_ambiguedad(versos_palabras, arboles, modo)
-        mostrar_pcfg(arboles)
+
+    estrofas = tokenizador.separar_estrofas(tokens)
+    print()
+    print(f" Se detectaron {len(estrofas)} estrofa(s) (separadas por línea en blanco).")
+
+    for n, versos in enumerate(estrofas, start=1):
+        print()
+        print(_linea("▒"))
+        print(f" ▶ ESTROFA {n}  ({len(versos)} verso(s))")
+        print(_linea("▒"))
+
+        mostrar_metrica(versos)
+        resultado = mostrar_estructura(versos)
+        if resultado:
+            versos_palabras, etiquetas, arboles, modo = resultado
+            mostrar_verificacion_rima(versos_palabras, etiquetas, arboles, modo)
+            mostrar_ambiguedad(versos_palabras, arboles, modo)
+            mostrar_pcfg(arboles)
     print()
 
 

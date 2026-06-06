@@ -29,7 +29,7 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 from src.ambiguedad.jerga import (
-    cargar_jerga, consultar, es_polisemica, palabras_registradas,
+    cargar_jerga, consultar, es_polisemica, palabras_registradas, indice_variantes,
 )
 from src.ambiguedad.detector_lexico import (
     detectar_palabras_ambiguas, analizar_ambiguedad_lexica, contexto_palabra,
@@ -244,12 +244,47 @@ def test_reporte(jerga_mini):
 # 4. Integración con el JSON real de data/
 # ════════════════════════════════════════════════════════════════════════════ #
 
+def test_robustez():
+    print("\n[Robustez: variantes declaradas, sin stemming ciego]")
+    jerga = {
+        "parcero": {
+            "variantes": ["parceros", "parcera"],
+            "acepciones": [
+                {"id": 1, "significado": "amigo",     "region": "paisa"},
+                {"id": 2, "significado": "apelativo", "region": "nacional"},
+            ],
+        },
+        "vacano": {
+            "variantes": ["bacano", "vacana"],
+            "acepciones": [
+                {"id": 1, "significado": "chévere",     "region": "nacional"},
+                {"id": 2, "significado": "de calidad",  "region": "nacional"},
+            ],
+        },
+    }
+    check(es_polisemica("parceros", jerga), "plural 'parceros' resuelve a 'parcero'")
+    check(es_polisemica("Parcera", jerga), "género + mayúscula 'Parcera' resuelve")
+    check(es_polisemica("bacano", jerga), "grafía alterna 'bacano' resuelve a 'vacano'")
+    check(consultar("parceros", jerga) == consultar("parcero", jerga),
+          "la variante devuelve las mismas acepciones que la canónica")
+    check(not es_polisemica("parceritos", jerga),
+          "una forma NO declarada no se inventa (sin stemming ciego)")
+    check(indice_variantes(jerga).get("bacano") == "vacano",
+          "el índice mapea variante → canónica")
+
+
 def test_json_real():
     print("\n[Integración con data/jerga_colombiana.json]")
     j = cargar_jerga()
     check(isinstance(j, dict) and len(j) > 0, "el JSON real existe y carga con entradas")
     check(es_polisemica("vuelta", j), "'vuelta' es polisémica en el JSON real")
     check(es_polisemica("parcero", j), "'parcero' es polisémico en el JSON real")
+
+    # Robustez contra el JSON real (palabras nuevas + variantes + falso positivo).
+    check(es_polisemica("vaina", j), "palabra nueva 'vaina' es polisémica en el JSON real")
+    check(es_polisemica("verraco", j), "palabra nueva 'verraco' es polisémica")
+    check(es_polisemica("parceros", j), "plural 'parceros' reconocido contra el JSON real")
+    check(not es_polisemica("notas", j), "el verbo 'notas' NO se confunde con 'nota'")
 
     completo = True
     for palabra, entrada in j.items():
@@ -268,6 +303,7 @@ def main():
         test_jerga(jerga_mini)
         test_detector_lexico(jerga_mini)
         test_reporte(jerga_mini)
+        test_robustez()
         test_json_real()
     finally:
         _limpiar_temporales()

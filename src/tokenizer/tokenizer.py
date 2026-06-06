@@ -192,6 +192,45 @@ class Tokenizador:
             versos.append(actual)
         return versos
 
+    @staticmethod
+    def separar_estrofas(tokens):
+        """Agrupa los tokens en ESTROFAS y, dentro de cada una, en VERSOS.
+
+        La frontera de estrofa es una LÍNEA EN BLANCO: el DFA colapsa los
+        saltos de línea consecutivos en un único token NEWLINE, así que una
+        línea en blanco se reconoce como un NEWLINE cuyo texto contiene dos o
+        más '\\n' (robusto en LF y en CRLF de Windows). Un salto simple o un
+        '/' separa versos dentro de la misma estrofa.
+
+        Devuelve list[list[list[Token]]]: estrofas → versos → tokens
+        (sin separadores ni espacios). Las estrofas y versos vacíos se omiten.
+        """
+        estrofas = []
+        estrofa_actual = []
+        verso_actual = []
+
+        def cerrar_verso():
+            if verso_actual:
+                estrofa_actual.append(list(verso_actual))
+                verso_actual.clear()
+
+        def cerrar_estrofa():
+            cerrar_verso()
+            if estrofa_actual:
+                estrofas.append(list(estrofa_actual))
+                estrofa_actual.clear()
+
+        for t in tokens:
+            if t.tipo == "NEWLINE" and t.texto.count("\n") >= 2:
+                cerrar_estrofa()                      # línea en blanco
+            elif t.tipo in ("VERSO_SEP", "NEWLINE"):
+                cerrar_verso()                        # salto simple o '/'
+            elif t.tipo != "ESPACIO":
+                verso_actual.append(t)
+
+        cerrar_estrofa()
+        return estrofas
+
 
 # --------------------------------------------------------------------------- #
 # Función de conveniencia
