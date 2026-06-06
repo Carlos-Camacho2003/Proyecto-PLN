@@ -92,7 +92,7 @@ def reporte_completo(arboles, modo: str, versos_palabras, jerga=None) -> str:
     `main.py` desde la fase 6 del pipeline.
     """
     secciones = [
-        " ── Ambigüedad estructural (Fase 4) ──",
+        " ── Ambigüedad estructural ──",
         reportar_ambiguedad_estructural(arboles, modo),
         "",
         " ── Ambigüedad léxica (jerga colombiana) ──",

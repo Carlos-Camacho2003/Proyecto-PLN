@@ -11,9 +11,10 @@ Pipeline:
     [7] PCFG: elige el esquema métrico más probable y reporta el ranking
 
 Uso:
-    python main.py                 # corre con la letra de demostración
+    python main.py                 # reporte conciso de todas las letras de data/
     python main.py archivo.txt     # analiza la letra contenida en un archivo
     python main.py -               # lee la letra desde la entrada estándar
+    python main.py --detalle       # salida completa fase por fase (árbol, DCG, PCFG)
 
 Versos:   se separan por '/' o por salto de línea simple.
 Estrofas: se separan por una línea en blanco.
@@ -37,12 +38,14 @@ from src.gramatica import (
     descripcion_formal,
 )
 from src.rima import secuencia_rimas, describir_esquema
-from src.unificacion import verificar_esquema, filtrar_arboles_validos
+from src.unificacion import verificar_esquema, filtrar_hipotesis
 from src.ambiguedad import (
     reportar_ambiguedad_estructural,
     reportar_ambiguedad_lexica,
+    analizar_ambiguedad_lexica,
 )
 from src.pcfg import (
+    mejor_arbol,
     reporte_ranking,
     reporte_desglose_ganador,
 )
@@ -62,24 +65,42 @@ def _linea(caracter="─", n=64):
 
 def mostrar_tokens(tokenizador, texto):
     print(_linea("═"))
-    print(" FASE 1 · TOKENIZACIÓN (DFA)")
+    print(" TOKENIZACIÓN (DFA)")
     print(_linea("═"))
     tokens = tokenizador.tokenizar(texto)
-    visibles = [t for t in tokens if t.tipo not in ("ESPACIO",)]
-    print(f" {len(visibles)} tokens (se omiten los espacios):\n")
+    visibles = [t for t in tokens if t.tipo != "ESPACIO"]
+
+    # Resumen por tipo en vez de listar cada token.
+    conteo = {}
     for t in visibles:
-        etiqueta = t.tipo
-        marca = "·"
-        if etiqueta == "CONTRACCION":
-            marca = "★"          # contracción del habla detectada
-        print(f"   {marca} {etiqueta:<11} {t.texto!r}")
+        conteo[t.tipo] = conteo.get(t.tipo, 0) + 1
+
+    nombres = {
+        "PALABRA": "palabras", "CONTRACCION": "contracciones", "NUMERO": "números",
+        "SIGNO": "signos", "VERSO_SEP": "separadores de verso", "NEWLINE": "saltos de línea",
+    }
+    resumen = "  ".join(
+        f"{conteo[tipo]} {nombres.get(tipo, tipo.lower())}"
+        for tipo in ("PALABRA", "CONTRACCION", "NUMERO", "SIGNO", "VERSO_SEP", "NEWLINE")
+        if conteo.get(tipo)
+    )
+    print(f" {len(visibles)} tokens (sin espacios): {resumen}")
+
+    # Detalle solo de lo que el DFA detecta de forma interesante.
+    contracciones = sorted({t.texto.lower() for t in visibles if t.tipo == "CONTRACCION"})
+    if contracciones:
+        print(f"   ★ contracciones del habla: {', '.join(contracciones)}")
+    numeros = [t.texto for t in visibles if t.tipo == "NUMERO"]
+    if numeros:
+        print(f"   # números: {', '.join(numeros)}")
+
     return tokens
 
 
 def mostrar_metrica(versos):
     print()
     print(_linea("═"))
-    print(" FASE 2 · MÉTRICA (silabeo + sinalefa + acento)")
+    print(" MÉTRICA (silabeo + sinalefa + acento)")
     print(_linea("═"))
 
     for n, verso_tokens in enumerate(versos, start=1):
@@ -131,7 +152,7 @@ def elegir_analisis_rima(versos_palabras):
 def mostrar_estructura(versos):
     print()
     print(_linea("═"))
-    print(" FASE 3 · ESTRUCTURA MÉTRICA (CFG + Parser)")
+    print(" ESTRUCTURA MÉTRICA (CFG + Parser)")
     print(_linea("═"))
 
     versos_palabras = [
@@ -161,20 +182,20 @@ def mostrar_estructura(versos):
     return versos_palabras, etiquetas, arboles, modo, modo_rima
 
 
-def mostrar_verificacion_rima(versos_palabras, etiquetas, arboles, modo_rima):
+def mostrar_verificacion_rima(versos_palabras, etiquetas, modo_rima):
     """Fase 5: verifica con DCG + unificación que las rimas reales sean
     consistentes con el esquema que propuso la CFG, en el mismo modo de rima
     (consonante o asonante) que se usó para detectar la estructura."""
     print()
     print(_linea("═"))
-    print(" FASE 5 · VERIFICACIÓN DE RIMAS (DCG + unificación)")
+    print(" VERIFICACIÓN DE RIMAS (DCG + unificación)")
     print(_linea("═"))
 
     # Verificación detallada del esquema observado.
     resultado = verificar_esquema(etiquetas, versos_palabras,
                                   modo=modo_rima, detalle=True)
 
-    print("\n Unificación de variables de rima:")
+    print("\n Unificación de variables de rima (esquema observado):")
     for paso in resultado["traza"]:
         print(f"   {paso}")
 
@@ -184,12 +205,17 @@ def mostrar_verificacion_rima(versos_palabras, etiquetas, arboles, modo_rima):
     else:
         print(f"\n ✗ Esquema INCONSISTENTE.  {resultado['motivo']}")
 
-    # Filtra los árboles de la CFG que sobreviven a la verificación.
-    if arboles:
-        validos = filtrar_arboles_validos(arboles, versos_palabras, modo=modo_rima)
-        print(f"\n Árboles que pasan la verificación DCG: {len(validos)}/{len(arboles)}")
-        for a in validos:
-            print(f"   ✓ {nombre_esquema(a)}")
+    # Prueba de hipótesis: la CFG propone TODOS los esquemas clásicos posibles
+    # para esta estrofa y la DCG rechaza los que no unifican con las rimas reales.
+    consistentes, rechazados = filtrar_hipotesis(versos_palabras, gramatica, modo=modo_rima)
+    if consistentes or rechazados:
+        print("\n Hipótesis de esquema (la DCG unifica cada una contra las rimas reales):")
+        for _, esquema, _ in consistentes:
+            print(f"   ✓ {esquema}: CONSISTENTE")
+        for _, esquema, res in rechazados:
+            print(f"   ✗ {esquema}: RECHAZADO — {res['motivo']}")
+        if not consistentes:
+            print("   → Ninguna hipótesis clásica unifica → la estrofa es libre.")
 
 
 def mostrar_ambiguedad(versos_palabras, arboles, modo):
@@ -197,7 +223,7 @@ def mostrar_ambiguedad(versos_palabras, arboles, modo):
     y LÉXICA (jerga colombiana polisémica como 'vuelta', 'parcero', ...)."""
     print()
     print(_linea("═"))
-    print(" FASE 6 · MANEJO DE AMBIGÜEDAD")
+    print(" MANEJO DE AMBIGÜEDAD")
     print(_linea("═"))
 
     print("\n ── Ambigüedad estructural ──")
@@ -211,7 +237,7 @@ def mostrar_pcfg(arboles):
     """Fase 7: asigna probabilidades a cada árbol y elige el más plausible."""
     print()
     print(_linea("═"))
-    print(" FASE 7 · DESAMBIGUACIÓN PROBABILÍSTICA (PCFG)")
+    print(" DESAMBIGUACIÓN PROBABILÍSTICA (PCFG)")
     print(_linea("═"))
 
     if not arboles:
@@ -248,63 +274,155 @@ def titulo_desde_ruta(ruta):
     return nombre.replace("_", " ").title()
 
 
-def analizar_letra(tokenizador, texto, titulo=None):
-    """Corre el pipeline completo sobre una letra, analizándola ESTROFA POR ESTROFA.
+# --------------------------------------------------------------------------- #
+# Reporte CONCISO (modo por defecto): un bloque corto por estrofa + resumen.
+# --------------------------------------------------------------------------- #
+def datos_estrofa(versos):
+    """Analiza una estrofa y devuelve sus hallazgos como dict (sin imprimir)."""
+    versos_palabras = [
+        [t.texto for t in v if t.tipo in ("PALABRA", "CONTRACCION")] for v in versos
+    ]
+    _, _, arboles, modo_gram, modo_rima = elegir_analisis_rima(versos_palabras)
 
-    La tokenización (Fase 1) se hace sobre toda la letra; el resto del pipeline
-    (métrica, CFG, DCG, ambigüedad, PCFG) se aplica a cada estrofa por separado.
-    Así las etiquetas de rima reinician en A en cada estrofa y los cuartetos /
-    pareados reales pueden coincidir con la CFG (en vez de colapsar en una única
-    estrofa libre que abarca toda la canción)."""
+    silabas = [
+        contar_silabas_verso([t.texto for t in v
+                              if t.tipo in ("PALABRA", "CONTRACCION", "NUMERO")])
+        for v in versos
+    ]
+
+    ambigua = (modo_gram == "clasica" and len(arboles) > 1)
+    if not arboles:
+        estructura, lecturas = "(no reconocida)", []
+    elif ambigua:
+        estructura = nombre_esquema(mejor_arbol(arboles))
+        lecturas = [nombre_esquema(a) for a in arboles]
+    else:
+        estructura, lecturas = nombre_esquema(arboles[0]), []
+
+    jerga = sorted({d["palabra"].lower() for d in analizar_ambiguedad_lexica(versos_palabras)})
+
+    return {
+        "n_versos": len(versos), "silabas": silabas, "modo_rima": modo_rima,
+        "estructura": estructura, "ambigua": ambigua, "lecturas": lecturas,
+        "jerga": jerga,
+    }
+
+
+def imprimir_estrofa_breve(n, d):
+    silabas = "·".join(str(s) for s in d["silabas"])
+    print(f"\n ▶ Estrofa {n} ({d['n_versos']}v) · {silabas} síl · rima {d['modo_rima']}")
+    if d["ambigua"]:
+        print(f"     CFG: ambigua → {' / '.join(d['lecturas'])}")
+        print(f"     PCFG elige: {d['estructura']}")
+    else:
+        print(f"     CFG: {d['estructura']}")
+    if d["jerga"]:
+        print(f"     jerga: {', '.join(d['jerga'])}")
+
+
+def imprimir_resumen(titulo, hallazgos):
+    print()
+    print(_linea("═"))
+    print(f" RESUMEN · {titulo}")
+    print(_linea("═"))
+    if not hallazgos:
+        print(" (sin estrofas)")
+        return
+
+    formas = {}
+    for d in hallazgos:
+        clave = "Estrofa libre" if d["estructura"].startswith("Estrofa libre") else d["estructura"]
+        formas[clave] = formas.get(clave, 0) + 1
+    formas_str = ", ".join(f"{c}× {f}" for f, c in sorted(formas.items(), key=lambda kv: -kv[1]))
+    print(f" {len(hallazgos)} estrofa(s):  {formas_str}")
+
+    n_amb = sum(1 for d in hallazgos if d["ambigua"])
+    if n_amb:
+        print(f" Ambigüedad estructural: {n_amb} estrofa(s) desambiguada(s) por la PCFG")
+
+    cons = sum(1 for d in hallazgos if d["modo_rima"] == "consonante")
+    print(f" Rima: {cons} consonante · {len(hallazgos) - cons} asonante")
+
+    silabas = [s for d in hallazgos for s in d["silabas"]]
+    if silabas:
+        print(f" Métrica: versos de {min(silabas)} a {max(silabas)} sílabas")
+
+    jerga = sorted({w for d in hallazgos for w in d["jerga"]})
+    if jerga:
+        print(f" Jerga polisémica: {', '.join(jerga)}")
+
+
+def analizar_letra(tokenizador, texto, titulo=None, detalle=False):
+    """Corre el pipeline sobre una letra, estrofa por estrofa.
+
+    Por defecto imprime un REPORTE CONCISO (un bloque por estrofa con los
+    hallazgos relevantes + un resumen final). Con `detalle=True` despliega la
+    salida completa fase por fase (tokens, métrica, árbol de derivación,
+    unificación DCG, ambigüedad y PCFG)."""
     print()
     if titulo:
         print(_linea("█"))
         print(f" ♪  {titulo}")
         print(_linea("█"))
-    print(" Letra analizada:")
-    print(f"   {texto.strip()}\n")
+    print(" Letra:")
+    for linea in texto.strip("\n").split("\n"):
+        print(f"   {linea}" if linea.strip() else "")
+    print()
 
     tokens = mostrar_tokens(tokenizador, texto)
-
     estrofas = tokenizador.separar_estrofas(tokens)
-    print()
-    print(f" Se detectaron {len(estrofas)} estrofa(s) (separadas por línea en blanco).")
+    print(f"\n {len(estrofas)} estrofa(s) (separadas por línea en blanco).")
 
+    hallazgos = []
     for n, versos in enumerate(estrofas, start=1):
-        print()
-        print(_linea("▒"))
-        print(f" ▶ ESTROFA {n}  ({len(versos)} verso(s))")
-        print(_linea("▒"))
+        d = datos_estrofa(versos)
+        if detalle:
+            print()
+            print(_linea("▒"))
+            print(f" ▶ ESTROFA {n}  ({len(versos)} verso(s))")
+            print(_linea("▒"))
+            mostrar_metrica(versos)
+            resultado = mostrar_estructura(versos)
+            if resultado:
+                versos_palabras, etiquetas, arboles, modo, modo_rima = resultado
+                mostrar_verificacion_rima(versos_palabras, etiquetas, modo_rima)
+                mostrar_ambiguedad(versos_palabras, arboles, modo)
+                mostrar_pcfg(arboles)
+        else:
+            imprimir_estrofa_breve(n, d)
+        hallazgos.append(d)
 
-        mostrar_metrica(versos)
-        resultado = mostrar_estructura(versos)
-        if resultado:
-            versos_palabras, etiquetas, arboles, modo, modo_rima = resultado
-            mostrar_verificacion_rima(versos_palabras, etiquetas, arboles, modo_rima)
-            mostrar_ambiguedad(versos_palabras, arboles, modo)
-            mostrar_pcfg(arboles)
-    print()
+    imprimir_resumen(titulo or "la letra", hallazgos)
 
 
 def main(argv=None):
-    argv = argv if argv is not None else sys.argv
+    argv = list(argv if argv is not None else sys.argv)
+
+    # Flag opcional: --detalle / -d despliega la salida completa por fases.
+    detalle = False
+    for flag in ("--detalle", "-d"):
+        while flag in argv:
+            argv.remove(flag)
+            detalle = True
+
     tokenizador = Tokenizador()
 
     # Con argumento (archivo o '-'): analiza esa única letra.
     if len(argv) >= 2:
-        analizar_letra(tokenizador, cargar_texto(argv))
+        titulo = titulo_desde_ruta(argv[1]) if argv[1] != "-" else None
+        analizar_letra(tokenizador, cargar_texto(argv), titulo=titulo, detalle=detalle)
         return
 
     # Sin argumentos: analiza todas las canciones de data/, una tras otra.
     canciones = listar_canciones()
     if not canciones:
-        analizar_letra(tokenizador, LETRA_DEMO, "Letra demo")
+        analizar_letra(tokenizador, LETRA_DEMO, "Letra demo", detalle=detalle)
         return
 
     for ruta in canciones:
         with open(ruta, "r", encoding="utf-8") as f:
             texto = f.read()
-        analizar_letra(tokenizador, texto, titulo_desde_ruta(ruta))
+        analizar_letra(tokenizador, texto, titulo_desde_ruta(ruta), detalle=detalle)
 
 
 if __name__ == "__main__":

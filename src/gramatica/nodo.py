@@ -24,17 +24,37 @@ class Nodo:
         self.hijos    = hijos if hijos else []
 
     # ------------------------------------------------------------------ #
-    # Representación textual con sangría — sin necesidad de matplotlib.
+    # Representación textual tipo *pretty tree* (estilo Unix `tree`),
+    # con conectores ├── └── y guías │ — sin necesidad de matplotlib.
     # ------------------------------------------------------------------ #
-    def mostrar(self, nivel: int = 0) -> str:
-        sangria = "  " * nivel
-        salida  = f"{sangria}{self.etiqueta}\n"
-        for hijo in self.hijos:
+    def mostrar(self) -> str:
+        """Devuelve el árbol de derivación dibujado con conectores.
+
+        Ejemplo (cuarteto AABB):
+
+            Estrofa
+            └── Cuarteto
+                ├── A
+                ├── A
+                ├── B
+                └── B
+        """
+        lineas = [str(self.etiqueta)]
+        self._ramas(lineas, "")
+        return "\n".join(lineas) + "\n"
+
+    def _ramas(self, lineas, prefijo):
+        """Anexa recursivamente las líneas de los hijos a `lineas`, usando
+        `prefijo` para dibujar las guías verticales de las ramas abiertas."""
+        total = len(self.hijos)
+        for i, hijo in enumerate(self.hijos):
+            ultimo   = (i == total - 1)
+            conector = "└── " if ultimo else "├── "
+            etiqueta = hijo.etiqueta if isinstance(hijo, Nodo) else hijo
+            lineas.append(f"{prefijo}{conector}{etiqueta}")
             if isinstance(hijo, Nodo):
-                salida += hijo.mostrar(nivel + 1)
-            else:
-                salida += f"{'  ' * (nivel + 1)}{hijo}\n"
-        return salida
+                extension = "    " if ultimo else "│   "
+                hijo._ramas(lineas, prefijo + extension)
 
     # ------------------------------------------------------------------ #
     # Recorre las hojas del árbol de izquierda a derecha.
