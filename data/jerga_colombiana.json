@@ -1,0 +1,299 @@
+{
+    "_comentario": "Jerga colombiana polisémica que aparece en las letras del corpus (data/*.txt)",
+    "_version": "2.2",
+    "_formato": "Cada palabra tiene 'acepciones' (id, significado, ejemplo, region, registro) y, opcionalmente, 'variantes' (plurales/genero que se reconocen como la misma palabra).",
+
+    "perro": {
+        "variantes": ["perros", "perra", "perras"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "crack / el mejor / muy hábil en lo suyo (admiración)",
+                "ejemplo": "ese man es un perro pa'l micrófono",
+                "region": "urbano",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "animal doméstico de cuatro patas",
+                "ejemplo": "el perro ladró toda la noche",
+                "region": "nacional",
+                "registro": "estándar"
+            },
+            {
+                "id": 3,
+                "significado": "infiel / mujeriego",
+                "ejemplo": "ese novio le salió perro",
+                "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "bravo": {
+        "variantes": ["bravos", "brava", "bravas"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "bravucón / que se las da de duro / fiero",
+                "ejemplo": "se las dan de malos bravos",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "enojado / de mal genio",
+                "ejemplo": "está bravo porque le contestaron",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 3,
+                "significado": "agitado / peligroso (referido al agua o al mar)",
+                "ejemplo": "el río baja bravo hoy",
+                "region": "nacional",
+                "registro": "estándar"
+            }
+        ]
+    },
+
+    "banda": {
+        "variantes": ["bandas"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "pandilla / combo / grupo delictivo del barrio",
+                "ejemplo": "andan en banda por toda la cuadra",
+                "region": "urbano",
+                "registro": "informal"
+            },
+            {
+                "id": 2,
+                "significado": "grupo musical",
+                "ejemplo": "toca el bajo en una banda de rock",
+                "region": "nacional",
+                "registro": "estándar"
+            },
+            {
+                "id": 3,
+                "significado": "franja / cinta / lado",
+                "ejemplo": "llevaba una banda roja en el brazo",
+                "region": "nacional",
+                "registro": "estándar"
+            }
+        ]
+    },
+
+    "bulla": {
+        "variantes": ["bullas"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "ruido / escándalo / algarabía",
+                "ejemplo": "no formen tanta bulla a esta hora",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "alboroto para llamar la atención / fama pasajera",
+                "ejemplo": "le metieron mucha bulla al artista nuevo",
+                "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "alzado": {
+        "variantes": ["alzados", "alzada", "alzadas"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "altanero / arrogante / insolente",
+                "ejemplo": "anda alzado desde que le entró plata",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "sublevado / rebelde / levantado en armas",
+                "ejemplo": "los alzados se tomaron el pueblo",
+                "region": "nacional",
+                "registro": "estándar"
+            }
+        ]
+    },
+
+    "raza": {
+        "variantes": ["razas"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "la gente / el combo / los parceros del barrio",
+                "ejemplo": "un saludo pa' toda la raza",
+                "region": "paisa",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "conjunto con rasgos comunes / casta / etnia",
+                "ejemplo": "es un perro de raza fina",
+                "region": "nacional",
+                "registro": "estándar"
+            }
+        ]
+    },
+
+    "papa": {
+        "variantes": ["papas"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "apelativo afectuoso o de respeto (parce / jefe)",
+                "ejemplo": "papa, ¿qué más?",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "tubérculo básico de la comida colombiana",
+                "ejemplo": "almuerzo con papa y carne",
+                "region": "nacional",
+                "registro": "estándar"
+            },
+            {
+                "id": 3,
+                "significado": "nada en absoluto (en la expresión 'ni papa')",
+                "ejemplo": "no entendió ni papa de la clase",
+                "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "cagado": {
+        "variantes": ["cagados"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "asustado / con miedo (estar cagado)",
+                "ejemplo": "cuando están solos caminan cagados",
+                "region": "nacional",
+                "registro": "informal"
+            },
+            {
+                "id": 2,
+                "significado": "ensuciado / manchado (sentido literal)",
+                "ejemplo": "el zapato quedó todo cagado de barro",
+                "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "hembra": {
+        "variantes": ["hembras"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "mujer (apelativo; a veces mujer atractiva o pareja)",
+                "ejemplo": "esa hembra es la dueña de mi corazón",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "individuo de sexo femenino de una especie animal",
+                "ejemplo": "la hembra del león cría sola a los cachorros",
+                "region": "nacional",
+                "registro": "estándar"
+            }
+        ]
+    },
+
+    "pieza": {
+        "variantes": ["piezas"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "habitación / cuarto",
+                "ejemplo": "se encerró en la pieza todo el día",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "parte / componente que encaja en un conjunto",
+                "ejemplo": "le falta una pieza al motor",
+                "region": "nacional",
+                "registro": "estándar"
+            },
+            {
+                "id": 3,
+                "significado": "persona de cuidado / sinvergüenza (ser una pieza)",
+                "ejemplo": "ese man es una pieza, no te fíes",
+                "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "man": {
+        "variantes": ["manes"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "tipo / individuo / persona cualquiera",
+                "ejemplo": "ese man no me cae bien",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "novio / pareja sentimental",
+                "ejemplo": "ese es el man de ella",
+                "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "bandido": {
+        "variantes": ["bandidos", "bandida", "bandidas"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "delincuente / forajido / persona peligrosa",
+                "ejemplo": "ese bandido tiene asustado al barrio",
+                "region": "nacional",
+                "registro": "estándar"
+            },
+            {
+                "id": 2,
+                "significado": "pícaro / travieso / conquistador (en tono cariñoso)",
+                "ejemplo": "ay, bandido, mire las cosas que dice",
+                "region": "nacional",
+                "registro": "coloquial"
+            }
+        ]
+    },
+
+    "piso": {
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "suelo / planta de un edificio",
+                "ejemplo": "vive en el quinto piso",
+                "region": "nacional",
+                "registro": "estándar"
+            },
+            {
+                "id": 2,
+                "significado": "matar / asesinar (en la expresión 'dar piso')",
+                "ejemplo": "le dieron piso al sapo que habló",
+                "region": "urbano",
+                "registro": "informal"
+            }
+        ]
+    }
+}
