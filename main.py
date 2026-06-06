@@ -108,6 +108,26 @@ def mostrar_metrica(versos):
         print(f"   Verso {n}: {c} sílabas ({etiqueta})")
 
 
+MODOS_RIMA = ("consonante", "asonante")
+
+
+def elegir_analisis_rima(versos_palabras):
+    """Prueba primero rima CONSONANTE; si la estrofa no encaja en ninguna forma
+    clásica de la CFG, reintenta con rima ASONANTE y usa esa lectura si revela
+    una estructura clásica. Prefiere consonante (más estricta) y solo recurre a
+    asonante cuando aporta estructura — útil en letras de rima mayormente asonante
+    (mucho rap/balada). Devuelve (etiquetas, mapa, arboles, modo_gramatica, modo_rima)."""
+    respaldo = None
+    for modo_rima in MODOS_RIMA:
+        etiquetas, mapa = secuencia_rimas(versos_palabras, modo=modo_rima)
+        arboles, modo_gram = analizar_con_fallback(etiquetas, gramatica, gramatica_con_libre)
+        if modo_gram == "clasica":
+            return etiquetas, mapa, arboles, modo_gram, modo_rima
+        if respaldo is None:                       # guarda la lectura consonante
+            respaldo = (etiquetas, mapa, arboles, modo_gram, modo_rima)
+    return respaldo
+
+
 def mostrar_estructura(versos):
     print()
     print(_linea("═"))
@@ -119,10 +139,9 @@ def mostrar_estructura(versos):
         for v in versos
     ]
 
-    etiquetas, mapa = secuencia_rimas(versos_palabras, modo="consonante")
-    print(f"\n {describir_esquema(etiquetas, mapa)}")
-
-    arboles, modo = analizar_con_fallback(etiquetas, gramatica, gramatica_con_libre)
+    etiquetas, mapa, arboles, modo, modo_rima = elegir_analisis_rima(versos_palabras)
+    print(f"\n Rima evaluada: {modo_rima}")
+    print(f" {describir_esquema(etiquetas, mapa)}")
 
     if not arboles:
         print(" -> No se pudo reconocer ninguna estructura.")
@@ -139,12 +158,13 @@ def mostrar_estructura(versos):
             if linea.strip():
                 print(f"   {linea}")
 
-    return versos_palabras, etiquetas, arboles, modo
+    return versos_palabras, etiquetas, arboles, modo, modo_rima
 
 
-def mostrar_verificacion_rima(versos_palabras, etiquetas, arboles, modo):
+def mostrar_verificacion_rima(versos_palabras, etiquetas, arboles, modo_rima):
     """Fase 5: verifica con DCG + unificación que las rimas reales sean
-    consistentes con el esquema que propuso la CFG."""
+    consistentes con el esquema que propuso la CFG, en el mismo modo de rima
+    (consonante o asonante) que se usó para detectar la estructura."""
     print()
     print(_linea("═"))
     print(" FASE 5 · VERIFICACIÓN DE RIMAS (DCG + unificación)")
@@ -152,7 +172,7 @@ def mostrar_verificacion_rima(versos_palabras, etiquetas, arboles, modo):
 
     # Verificación detallada del esquema observado.
     resultado = verificar_esquema(etiquetas, versos_palabras,
-                                  modo="consonante", detalle=True)
+                                  modo=modo_rima, detalle=True)
 
     print("\n Unificación de variables de rima:")
     for paso in resultado["traza"]:
@@ -166,7 +186,7 @@ def mostrar_verificacion_rima(versos_palabras, etiquetas, arboles, modo):
 
     # Filtra los árboles de la CFG que sobreviven a la verificación.
     if arboles:
-        validos = filtrar_arboles_validos(arboles, versos_palabras, modo="consonante")
+        validos = filtrar_arboles_validos(arboles, versos_palabras, modo=modo_rima)
         print(f"\n Árboles que pasan la verificación DCG: {len(validos)}/{len(arboles)}")
         for a in validos:
             print(f"   ✓ {nombre_esquema(a)}")
@@ -259,8 +279,8 @@ def analizar_letra(tokenizador, texto, titulo=None):
         mostrar_metrica(versos)
         resultado = mostrar_estructura(versos)
         if resultado:
-            versos_palabras, etiquetas, arboles, modo = resultado
-            mostrar_verificacion_rima(versos_palabras, etiquetas, arboles, modo)
+            versos_palabras, etiquetas, arboles, modo, modo_rima = resultado
+            mostrar_verificacion_rima(versos_palabras, etiquetas, arboles, modo_rima)
             mostrar_ambiguedad(versos_palabras, arboles, modo)
             mostrar_pcfg(arboles)
     print()
