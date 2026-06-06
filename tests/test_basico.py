@@ -50,6 +50,16 @@ def test_tokenizador():
     igual(tipos.get("ke"), "CONTRACCION", "reconoce contraccion ke")
     igual(tipos.get("barrio"), "PALABRA", "barrio es PALABRA normal")
 
+    # Apocope general: cualquier palabra con apostrofo final = contraccion del
+    # habla (la -s elidida del Caribe), aunque no este en la lista fija.
+    toks = tk.tokenizar("tu ere' el ma' duro, lo' que controlan con pistola'")
+    tipos = {t.texto.lower(): t.tipo for t in toks if t.tipo in ("PALABRA", "CONTRACCION")}
+    igual(tipos.get("ere'"), "CONTRACCION", "apocope: ere' (eres) es CONTRACCION")
+    igual(tipos.get("ma'"), "CONTRACCION", "apocope: ma' (mas) es CONTRACCION")
+    igual(tipos.get("lo'"), "CONTRACCION", "apocope: lo' (los) es CONTRACCION")
+    igual(tipos.get("pistola'"), "CONTRACCION", "apocope: pistola' (pistolas) es CONTRACCION")
+    igual(tipos.get("duro"), "PALABRA", "palabra sin apostrofo sigue siendo PALABRA")
+
     toks = tk.tokenizar("uno dos / tres cuatro")
     versos = tk.separar_versos(toks)
     igual(len(versos), 2, "separa dos versos por '/'")

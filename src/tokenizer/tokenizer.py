@@ -160,9 +160,18 @@ class Tokenizador:
 
             lexema = texto[i:i + longitud]
 
-            # Reetiquetado: ¿es una contracción conocida?
-            if etiqueta == "PALABRA" and lexema.lower() in CONTRACCIONES:
-                etiqueta = "CONTRACCION"
+            # Reetiquetado a CONTRACCION:
+            #   1) lexema en la lista de contracciones conocidas (pa, to, ke, ...).
+            #   2) patrón GENERAL de apócope: cualquier palabra que termine en
+            #      apóstrofo marca una elisión del habla — típicamente la -s final
+            #      del Caribe (má'=más, lo'=los, sabe'=sabes, pistola'=pistolas) o
+            #      una vocal/sílaba recortada (pa'=para). Esto cubre las variantes
+            #      no listadas sin tener que enumerarlas todas.
+            if etiqueta == "PALABRA":
+                if lexema.lower() in CONTRACCIONES or (
+                    len(lexema) > 1 and lexema[-1] in APOSTROFOS
+                ):
+                    etiqueta = "CONTRACCION"
 
             tokens.append(Token(etiqueta, lexema, i, i + longitud))
             i += longitud
