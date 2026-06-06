@@ -286,6 +286,9 @@ def test_json_real():
     check(es_polisemica("perros", j), "plural 'perros' reconocido (→ perro)")
     check(es_polisemica("hembra", j), "'hembra' (Querer querernos) es polisémica")
     check(es_polisemica("piezas", j), "plural 'piezas' (Querer querernos) reconocido (→ pieza)")
+    check(es_polisemica("man", j), "'man' (Bandido) es polisémica")
+    check(es_polisemica("bandido", j), "'bandido' (Bandido) es polisémica")
+    check(es_polisemica("piso", j), "'piso' (Bandido, 'dar piso') es polisémica")
     check(not es_polisemica("notas", j), "el verbo 'notas' (Manicomio) NO se marca como jerga")
 
     completo = True

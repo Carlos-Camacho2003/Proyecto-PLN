@@ -1,6 +1,6 @@
 {
     "_comentario": "Jerga colombiana polisémica que aparece en las letras del corpus (data/*.txt)",
-    "_version": "2.1",
+    "_version": "2.2",
     "_formato": "Cada palabra tiene 'acepciones' (id, significado, ejemplo, region, registro) y, opcionalmente, 'variantes' (plurales/genero que se reconocen como la misma palabra).",
 
     "perro": {
@@ -233,6 +233,65 @@
                 "significado": "persona de cuidado / sinvergüenza (ser una pieza)",
                 "ejemplo": "ese man es una pieza, no te fíes",
                 "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "man": {
+        "variantes": ["manes"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "tipo / individuo / persona cualquiera",
+                "ejemplo": "ese man no me cae bien",
+                "region": "nacional",
+                "registro": "coloquial"
+            },
+            {
+                "id": 2,
+                "significado": "novio / pareja sentimental",
+                "ejemplo": "ese es el man de ella",
+                "region": "nacional",
+                "registro": "informal"
+            }
+        ]
+    },
+
+    "bandido": {
+        "variantes": ["bandidos", "bandida", "bandidas"],
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "delincuente / forajido / persona peligrosa",
+                "ejemplo": "ese bandido tiene asustado al barrio",
+                "region": "nacional",
+                "registro": "estándar"
+            },
+            {
+                "id": 2,
+                "significado": "pícaro / travieso / conquistador (en tono cariñoso)",
+                "ejemplo": "ay, bandido, mire las cosas que dice",
+                "region": "nacional",
+                "registro": "coloquial"
+            }
+        ]
+    },
+
+    "piso": {
+        "acepciones": [
+            {
+                "id": 1,
+                "significado": "suelo / planta de un edificio",
+                "ejemplo": "vive en el quinto piso",
+                "region": "nacional",
+                "registro": "estándar"
+            },
+            {
+                "id": 2,
+                "significado": "matar / asesinar (en la expresión 'dar piso')",
+                "ejemplo": "le dieron piso al sapo que habló",
+                "region": "urbano",
                 "registro": "informal"
             }
         ]
