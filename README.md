@@ -121,7 +121,8 @@ Proyecto-PLN/
 │   ├── manicomio_527.txt
 │   ├── querer_querernos.txt
 │   ├── bandido.txt
-│   └── la_maza.txt
+│   ├── la_maza.txt
+│   └── cancion_de_otono.txt
 └── tests/
     ├── test_basico.py
     ├── test_segmentacion.py
